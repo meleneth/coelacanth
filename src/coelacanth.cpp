@@ -11,22 +11,19 @@
 
 #include "easylogging++.h"
 
+#include "engine/udp_listener.hpp"
+
 #define CONNECTHOST "localhost"
 
-#define MYPORT "4950"	// the port users will be connecting to
-#define SERVERPORT "4950"	// the port users will be connecting to
+#define MYPORT 4950	
+// the port users will be connecting to
+#define SERVERPORT 4950	
+#define SERVERPORTSTRING "4950"
+// the port users will be connecting to
 
 #define MAXBUFLEN 100
 
-// get sockaddr, IPv4 or IPv6:
-void *get_in_addr(struct sockaddr *sa)
-{
-	if (sa->sa_family == AF_INET) {
-		return &(((struct sockaddr_in*)sa)->sin_addr);
-	}
-
-	return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
+using namespace Coelacanth;
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -41,8 +38,7 @@ int entry_serve() {
 
   */
 	
-	auto listener = UDPListener("localhost", SERVERPORT)
-	listener.listen();
+	UDPListener listener("localhost", SERVERPORTSTRING);
 
   LOG(INFO) << "listener: waiting to recvfrom...";
 
@@ -62,7 +58,7 @@ int entry_client(std::string name) {
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_DGRAM;
 
-	if ((rv = getaddrinfo(CONNECTHOST, SERVERPORT, &hints, &servinfo)) != 0) {
+	if ((rv = getaddrinfo(CONNECTHOST, SERVERPORTSTRING, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
 	}

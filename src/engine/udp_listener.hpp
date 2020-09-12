@@ -18,17 +18,18 @@ namespace Coelacanth {
 
 class UDPListener {
   public:
-    UDPListener(std::string hostname, int port);
+    UDPListener(std::string hostname, std::string port);
     ~UDPListener();
-    listen();
-    recv();
+    void recv();
 int sockfd;
 struct addrinfo hints, *servinfo, *p;
 int rv;
 int numbytes;
 struct sockaddr_storage their_addr;
-char buf[MAXBUFLEN];
+char buf[UDPLISTENMAXBUFLEN];
 socklen_t addr_len;
 char s[INET6_ADDRSTRLEN];
 };
+
+}
 #endif

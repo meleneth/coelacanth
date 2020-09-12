@@ -9,11 +9,5 @@ class GameServer {
     ~GameServer();
 };
 
-class NetServer {
-public:
-  NetServer();
-  ~NetServer();
-}
-
 }
 #endif

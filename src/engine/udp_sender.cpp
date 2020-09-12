@@ -1,5 +1,7 @@
 #include "udp_sender.hpp"
 
+using namespace Coelacanth;
+
 UDPSender::UDPSender()
 {
 
@@ -10,12 +12,7 @@ UDPSender::~UDPSender()
 
 }
 
-UDPSender::listen()
-{
-
-}
-
-UDPSender::recv()
+void UDPSender::send()
 {
 
 }
