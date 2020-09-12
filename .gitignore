@@ -8,7 +8,7 @@ missing
 depcomp
 install-sh
 bin/*.exe
-bin/sapien
+bin/coelacanth
 bin/mapeditor
 *.swp
 stamp-h1

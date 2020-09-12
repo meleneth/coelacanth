@@ -32,6 +32,28 @@ INITIALIZE_EASYLOGGINGPP
 
 int entry_serve() {
   LOG(INFO) << "starting serve";
+  // SPECS:
+  // JOINED THE SERVER means you get a TICK from the server every 250ms
+  
+  // client commands
+  // ===============
+  // HELO myname -- JOIN THE SERVER as myname
+  // GOODBYE -- disconnect from the server (clean)
+  // SWING targetid -- swing at target by id
+
+  // server commands
+  // ===============
+  // TICK tickid -- heartbeat
+  // MONSTER typeid targetid -- a monster has appeared!
+
+  /*
+    server = NetServer("localhost", 4850);
+    server->listen();
+
+    clients = Vector<NetClient>;
+
+  */
+
 	int sockfd;
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
@@ -126,9 +148,9 @@ int entry_client(std::string name) {
 		return 2;
 	}
 
-  auto message = "HELO name";
+  std::string message = "HELO " + name;
 
-	if ((numbytes = sendto(sockfd, message, strlen(message), 0,
+	if ((numbytes = sendto(sockfd, message.c_str(), message.length(), 0,
 			 p->ai_addr, p->ai_addrlen)) == -1) {
 		LOG(ERROR) << "talker: sendto";
 		exit(1);
