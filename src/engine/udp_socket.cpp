@@ -5,109 +5,82 @@
 using namespace Coelacanth;
 
 // get sockaddr, IPv4 or IPv6:
-void *get_in_addr(struct sockaddr *sa)
-{
-	if (sa->sa_family == AF_INET) {
-		return &(((struct sockaddr_in*)sa)->sin_addr);
-	}
+void *get_in_addr(struct sockaddr *sa) {
+  if (sa->sa_family == AF_INET) {
+    return &(((struct sockaddr_in *)sa)->sin_addr);
+  }
 
-	return &(((struct sockaddr_in6*)sa)->sin6_addr);
+  return &(((struct sockaddr_in6 *)sa)->sin6_addr);
 }
 
-UDPSocket::UDPSocket(std::string hostname, std::string port)
-{
-  	memset(&hints, 0, sizeof hints);
-  	hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
-  	hints.ai_socktype = SOCK_DGRAM;
-  	hints.ai_flags = AI_PASSIVE; // use my IP
+UDPSocket::UDPSocket() {}
 
-  	if ((rv = getaddrinfo(NULL, port.c_str(), &hints, &servinfo)) != 0) {
-  		LOG(ERROR) << "getaddrinfo: " << gai_strerror(rv);
-  		return;
-  	}
+UDPSocket::~UDPSocket() {}
 
-  	// loop through all the results and bind to the first we can
-  	for(p = servinfo; p != NULL; p = p->ai_next) {
-  		if ((sockfd = socket(p->ai_family, p->ai_socktype,
-  				p->ai_protocol)) == -1) {
-  			LOG(ERROR) << "listener: socket";
-  			return;
-  		}
+void UDPSocket::connect_to(std::string hostname, int port) {
+  /* create a socket */
 
-  		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
-  			close(sockfd);
-  			LOG(ERROR) << "listener: bind";
-  			return;
-  		}
+  if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+    LOG(INFO) << "socket created";
 
-  		break;
-  	}
+  /* bind it to all local addresses and pick any port number */
 
-  	if (p == NULL) {
-  		LOG(ERROR) << "listener: failed to bind socket";
-  		return;
-  	}
+  memset((char *)&myaddr, 0, sizeof(myaddr));
+  myaddr.sin_family = AF_INET;
+  myaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+  myaddr.sin_port = htons(0);
 
-  	freeaddrinfo(servinfo);
+  if (bind(fd, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0) {
+    LOG(ERROR) << "connect_to bind failed";
+    return;
+  }
 
+  /* now define remaddr, the address to whom we want to send messages */
+  /* For convenience, the host address is expressed as a numeric IP address */
+  /* that we will convert to a binary format via inet_aton */
 
+  memset((char *)&remoteaddr, 0, sizeof(remoteaddr));
+  remoteaddr.sin_family = AF_INET;
+  remoteaddr.sin_port = htons(port);
+  if (inet_aton(hostname.c_str(), &remoteaddr.sin_addr) == 0) {
+    LOG(ERROR) << "inet_aton() failed";
+    exit(1);
+  }
 }
 
-UDPSocket::~UDPSocket()
-{
-	close(sockfd);
+void UDPSocket::listen(int port) {
+  /* create a UDP socket */
+
+  if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+    perror("cannot create socket\n");
+    return;
+  }
+
+  /* bind the socket to any valid IP address and a specific port */
+
+  memset((char *)&myaddr, 0, sizeof(myaddr));
+  myaddr.sin_family = AF_INET;
+  myaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+  myaddr.sin_port = htons(port);
+
+  if (bind(fd, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0) {
+    LOG(ERROR) << "bind failed";
+    return;
+  }
 }
 
-void UDPSocket::recv()
-{
-  addr_len = sizeof their_addr;
-	if ((numbytes = recvfrom(sockfd, buf, UDPLISTENMAXBUFLEN-1 , 0,
-		(struct sockaddr *)&their_addr, &addr_len)) == -1) {
-		LOG(ERROR) << "recvfrom";
-		exit(1);
-	}
-
-	LOG(INFO) << "listener: got packet from " << inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s);
-	LOG(INFO) << "listener: packet is " << numbytes << " bytes long";
-	buf[numbytes] = '\0';
-	LOG(INFO) << "listener: packet contains \"" << buf << "\"";
-
-	close(sockfd);
+void UDPSocket::recv() {
+  if ((recvlen = recvfrom(fd, buf, UDPSOCKETMAXBUFLEN - 1, 0,
+                          (struct sockaddr *)&remoteaddr, &addrlen)) == -1) {
+    LOG(ERROR) << "recvfrom";
+    exit(1);
+  }
 }
 
-UDPSocket::connect_to(std::string hostname, std::string port)
-{
-  	memset(&hints, 0, sizeof hints);
-  	hints.ai_family = AF_UNSPEC;
-  	hints.ai_socktype = SOCK_DGRAM;
-
-  	if ((rv = getaddrinfo(hostname.c_str(), port.c_str(), &hints, &servinfo)) != 0) {
-  		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-  		return 1;
-  	}
-  	// loop through all the results and make a socket
-  	for(p = servinfo; p != NULL; p = p->ai_next) {
-  		if ((sockfd = socket(p->ai_family, p->ai_socktype,
-  				p->ai_protocol)) == -1) {
-  			LOG(ERROR) << "talker: socket";
-  			continue;
-  		}
-  		break;
-  	}
-
-  	if (p == NULL) {
-  	  LOG(ERROR) << "talker: failed to create socket";
-  		return 2;
-  	}
-    freeaddrinfo(servinfo);
-}
-
-void UDPSocket::send(std::string message)
-{
-  if ((numbytes = sendto(sockfd, message.c_str(), message.length(), 0,
-			 p->ai_addr, p->ai_addrlen)) == -1) {
-		LOG(ERROR) << "talker: sendto";
-		exit(1);
-	}
-  LOG(INFO) << "talker: sent " << numbytes << " bytes to " << CONNECTHOST;
+void UDPSocket::send(std::string message) {
+  if ((recvlen = sendto(fd, message.c_str(), message.length(), 0,
+                        (struct sockaddr *)&remoteaddr, addrlen)) == -1) {
+    LOG(ERROR) << "talker: sendto";
+    exit(1);
+  }
 }

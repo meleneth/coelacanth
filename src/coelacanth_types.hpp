@@ -9,9 +9,9 @@
 namespace Coelacanth {
   class GameClient;
   class GameServer;
-  class UDPListener;
-  class UDPSender;
+  class UDPSocket;
   typedef std::list<GameClient> GameClientList;
+  typedef std::list<UDPSocket *> UDPSocketList;
 }
 
 #endif

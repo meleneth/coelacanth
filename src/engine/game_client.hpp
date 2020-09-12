@@ -2,9 +2,9 @@
 #define GAMECLIENT_HPP
 
 class GameClient {
-  public:
-    GameClient();
-    ~GameClient();
+public:
+  GameClient();
+  ~GameClient();
 };
 
 #endif

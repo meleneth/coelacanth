@@ -2,10 +2,6 @@
 
 using namespace Coelacanth;
 
-GameServer::GameServer()
-{
-}
+GameServer::GameServer() {}
 
-GameServer::~GameServer()
-{
-}
+GameServer::~GameServer() {}

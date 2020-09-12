@@ -13,3 +13,4 @@ server commands
 ===============
 TICK tickid -- heartbeat
 MONSTER typeid targetid -- a monster has appeared!
+WELCOME targetid -- server recognizes you and bids you welcome

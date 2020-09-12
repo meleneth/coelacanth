@@ -12,27 +12,26 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define UDPLISTENMAXBUFLEN 100
+#define UDPSOCKETMAXBUFLEN 255
 
 namespace Coelacanth {
 
 class UDPSocket {
-  public:
-    UDPSocket();
-    ~UDPListener();
-    void recv();
-    void listen(std::string hostname, std::string port);
-    void connect_to(std::string hostname, std::string port);
-    void send(std::string message);
-int sockfd;
-struct addrinfo hints, *servinfo, *p;
-int rv;
-int numbytes;
-struct sockaddr_storage their_addr;
-char buf[UDPLISTENMAXBUFLEN];
-socklen_t addr_len;
-char s[INET6_ADDRSTRLEN];
+public:
+  UDPSocket();
+  ~UDPSocket();
+  void recv();
+  void listen(int port);
+  void connect_to(std::string hostname, int port);
+  void send(std::string message);
+
+  struct sockaddr_in myaddr;
+  struct sockaddr_in remoteaddr;
+  socklen_t addrlen = sizeof(remoteaddr);
+  int recvlen;
+  int fd;
+  unsigned char buf[UDPSOCKETMAXBUFLEN];
 };
 
-}
+} // namespace Coelacanth
 #endif

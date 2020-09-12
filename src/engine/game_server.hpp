@@ -4,10 +4,10 @@
 namespace Coelacanth {
 
 class GameServer {
-  public:
-    GameServer();
-    ~GameServer();
+public:
+  GameServer();
+  ~GameServer();
 };
 
-}
+} // namespace Coelacanth
 #endif
