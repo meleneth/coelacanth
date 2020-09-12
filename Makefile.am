@@ -11,10 +11,8 @@ src_libcoelacanth_a_SOURCES = \
   src/engine/game_bot.cpp \
   src/engine/game_client.hpp \
   src/engine/game_client.cpp \
-	src/engine/udp_listener.cpp \
-	src/engine/udp_listener.hpp \
-	src/engine/udp_sender.cpp \
-	src/engine/udp_sender.hpp
+	src/engine/udp_socket.cpp \
+	src/engine/udp_socket.hpp
 
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
 

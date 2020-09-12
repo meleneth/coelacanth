@@ -1,5 +1,5 @@
-#ifndef UDPSENDER_HPP
-#define UDPSENDER_HPP
+#ifndef UDPSOCKET_HPP
+#define UDPSOCKET_HPP
 
 #include <arpa/inet.h>
 #include <errno.h>
@@ -16,11 +16,14 @@
 
 namespace Coelacanth {
 
-class UDPSender {
+class UDPSocket {
   public:
-    UDPSender();
-    ~UDPSender();
-    void send();
+    UDPSocket();
+    ~UDPListener();
+    void recv();
+    void listen(std::string hostname, std::string port);
+    void connect_to(std::string hostname, std::string port);
+    void send(std::string message);
 int sockfd;
 struct addrinfo hints, *servinfo, *p;
 int rv;
@@ -32,5 +35,4 @@ char s[INET6_ADDRSTRLEN];
 };
 
 }
-
 #endif
