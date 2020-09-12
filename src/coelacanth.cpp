@@ -36,6 +36,16 @@ UDPSocket *client_for_listener(UDPSocket &listener) {
   return client;
 }
 
+void entry_heartbeat() {
+  UDPSocket sender;
+  LOG(INFO) << "can you feel my heartbeat";
+  sender.connect_to("127.0.0.1", 4095);
+  while(1) {
+    sender.send("HEARTBEAT");
+    usleep(2500000);
+  }
+}
+
 void entry_serve() {
   LOG(INFO) << "starting serve";
   UDPSocket listener;
@@ -68,6 +78,7 @@ void entry_client(std::string name) {
   while(1) {
     LOG(INFO) << "[cLient] waiting to recvfrom...";
     sender.recv();
+    LOG(INFO) << "[cLient] got: " << sender.buf;
   }
 }
 
@@ -75,6 +86,9 @@ int main(int argc, char *argv[]) {
   el::Loggers::configureFromGlobal("/home/meleneth/.logging.conf");
 
   if (argc > 1) {
+    if (strcmp(argv[1], "heartbeat") == 0) {
+      entry_heartbeat();
+    }
     if (strcmp(argv[1], "serve") == 0) {
       entry_serve();
     }

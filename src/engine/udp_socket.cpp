@@ -75,6 +75,7 @@ void UDPSocket::recv() {
     LOG(ERROR) << "recvfrom";
     exit(1);
   }
+  buf[recvlen] = 0; // nothing like corrupting the data we just downloaded
 }
 
 void UDPSocket::send(std::string message) {
