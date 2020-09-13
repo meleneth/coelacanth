@@ -14,6 +14,8 @@
 
 #define UDPSOCKETMAXBUFLEN 255
 
+#include"data_buffer.hpp"
+
 namespace Coelacanth {
 
 class UDPSocket {
@@ -28,9 +30,8 @@ public:
   struct sockaddr_in myaddr;
   struct sockaddr_in remoteaddr;
   socklen_t addrlen = sizeof(remoteaddr);
-  int recvlen;
   int fd;
-  unsigned char buf[UDPSOCKETMAXBUFLEN];
+  DataBuffer buffer;
 };
 
 } // namespace Coelacanth

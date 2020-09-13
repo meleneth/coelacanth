@@ -12,7 +12,9 @@ src_libcoelacanth_a_SOURCES = \
   src/engine/game_client.hpp \
   src/engine/game_client.cpp \
 	src/engine/udp_socket.cpp \
-	src/engine/udp_socket.hpp
+	src/engine/udp_socket.hpp \
+  src/engine/data_buffer.cpp \
+  src/engine/data_buffer.hpp
 
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
 

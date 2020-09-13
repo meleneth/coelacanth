@@ -10,6 +10,7 @@ namespace Coelacanth {
   class GameClient;
   class GameServer;
   class UDPSocket;
+  class DataBuffer;
   typedef std::list<GameClient> GameClientList;
   typedef std::list<UDPSocket *> UDPSocketList;
 }

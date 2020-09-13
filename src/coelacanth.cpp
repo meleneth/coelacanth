@@ -55,12 +55,21 @@ void entry_serve() {
   while(1) {
     LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
-    client_for_listener(listener);
-    LOG(INFO) << "[seRve] server got: " << listener.buf;
-    std::stringstream reply;
-    reply << "WELCOME " << 42;
-    for (auto client : clients) {
-      client->send(reply.str());
+    if (listener.buffer.starts_with("HELO ")) {
+      std::string name = std::string((char *)listener.buffer.storage + 5);
+      LOG(INFO) << "[seRve] server got HELO for : " << name;
+
+      client_for_listener(listener);
+      // machine: ClientConnection
+      // machine.event(listener.buf, listener.recvlength)
+      LOG(INFO) << "[seRve] server got: " << listener.buffer.storage;
+      std::stringstream reply;
+      reply << "WELCOME " << 42;
+      for (auto client : clients) {
+        client->send(reply.str());
+      }
+    } else {
+      LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
     }
   }
 }
@@ -78,7 +87,7 @@ void entry_client(std::string name) {
   while(1) {
     LOG(INFO) << "[cLient] waiting to recvfrom...";
     sender.recv();
-    LOG(INFO) << "[cLient] got: " << sender.buf;
+    LOG(INFO) << "[cLient] got: " << sender.buffer.storage;
   }
 }
 

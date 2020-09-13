@@ -13,7 +13,7 @@ void *get_in_addr(struct sockaddr *sa) {
   return &(((struct sockaddr_in6 *)sa)->sin6_addr);
 }
 
-UDPSocket::UDPSocket() {}
+UDPSocket::UDPSocket() : buffer(UDPSOCKETMAXBUFLEN) {}
 
 UDPSocket::~UDPSocket() {}
 
@@ -70,17 +70,18 @@ void UDPSocket::listen(int port) {
 }
 
 void UDPSocket::recv() {
-  if ((recvlen = recvfrom(fd, buf, UDPSOCKETMAXBUFLEN - 1, 0,
+  if ((buffer.active_length = recvfrom(fd, buffer.storage, buffer.buffer_length - 1, 0,
                           (struct sockaddr *)&remoteaddr, &addrlen)) == -1) {
     LOG(ERROR) << "recvfrom";
     exit(1);
   }
-  buf[recvlen] = 0; // nothing like corrupting the data we just downloaded
+  buffer.storage[buffer.active_length] = 0; // nothing like corrupting the data we just downloaded
 }
 
 void UDPSocket::send(std::string message) {
-  if ((recvlen = sendto(fd, message.c_str(), message.length(), 0,
-                        (struct sockaddr *)&remoteaddr, addrlen)) == -1) {
+  ssize_t sentlen = sendto(fd, message.c_str(), message.length(), 0,
+                        (struct sockaddr *)&remoteaddr, addrlen);
+  if (sentlen == -1 ) {
     LOG(ERROR) << "talker: sendto";
     exit(1);
   }
