@@ -4,17 +4,25 @@ bin_PROGRAMS = bin/coelacanth
 ACLOCAL_AMFLAGS = -I m4
 
 src_libcoelacanth_a_SOURCES = \
-	src/coelacanth_types.hpp \
-  src/engine/game_server.hpp \
-  src/engine/game_server.cpp \
-  src/engine/game_bot.hpp \
-  src/engine/game_bot.cpp \
-  src/engine/game_client.hpp \
-  src/engine/game_client.cpp \
-	src/engine/udp_socket.cpp \
-	src/engine/udp_socket.hpp \
+  src/coelacanth_types.hpp \
   src/engine/data_buffer.cpp \
-  src/engine/data_buffer.hpp
+  src/engine/data_buffer.hpp \
+  src/engine/game_bot.cpp \
+  src/engine/game_bot.hpp \
+  src/engine/game_client.cpp \
+  src/engine/game_client.hpp \
+  src/engine/game_server.cpp \
+  src/engine/game_server.hpp \
+  src/engine/udp_socket.cpp \
+  src/engine/udp_socket.hpp \
+  src/machine/ticker/ticker_machine.cpp \
+  src/machine/ticker/ticker_machine.hpp \
+  src/machine/ticker/ticker_machine_state.cpp \
+  src/machine/ticker/ticker_machine_state.hpp \
+  src/machine/ticker/ticker_machine_state_tick.cpp \
+  src/machine/ticker/ticker_machine_state_tick.hpp \
+  src/machine/ticker/ticker_machine_state_tock.cpp \
+  src/machine/ticker/ticker_machine_state_tock.hpp
 
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
 

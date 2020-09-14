@@ -16,6 +16,7 @@
 
 #include "coelacanth_types.hpp"
 #include "engine/udp_socket.hpp"
+#include "machine/ticker/ticker_machine.hpp"
 
 using namespace Coelacanth;
 
@@ -52,21 +53,28 @@ void entry_serve() {
 
   listener.listen(4095);
 
+  TickerMachine ticker;
+
   while(1) {
     LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
     if (listener.buffer.starts_with("HELO ")) {
       std::string name = std::string((char *)listener.buffer.storage + 5);
-      LOG(INFO) << "[seRve] server got HELO for : " << name;
+//      LOG(INFO) << "[seRve] server got HELO for : " << name;
 
       client_for_listener(listener);
       // machine: ClientConnection
-      // machine.event(listener.buf, listener.recvlength)
-      LOG(INFO) << "[seRve] server got: " << listener.buffer.storage;
+      // machine.event(listener.buffer)
+  //    LOG(INFO) << "[seRve] server got: " << listener.buffer.storage;
       std::stringstream reply;
-      reply << "WELCOME " << 42;
+      reply << "WELCOME " << name;
       for (auto client : clients) {
         client->send(reply.str());
+      }
+    } else if (listener.buffer.starts_with("HEARTBEAT")) {
+      ticker.tick();
+      for (auto client : clients) {
+        client->send("TICK tick_id");
       }
     } else {
       LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
@@ -78,16 +86,11 @@ void entry_client(std::string name) {
   LOG(INFO) << "[cLient] starting client " << name;
   UDPSocket sender;
   sender.connect_to("127.0.0.1", 4095);
-  sender.send("ISAIDHELLO " + name);
-  //sleep(1);
   sender.send("HELO " + name);
-  //sleep(1);
-  sender.send("ISAIDHELO " + name);
-  //sleep(1);
   while(1) {
     LOG(INFO) << "[cLient] waiting to recvfrom...";
     sender.recv();
-    LOG(INFO) << "[cLient] got: " << sender.buffer.storage;
+    LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
   }
 }
 
