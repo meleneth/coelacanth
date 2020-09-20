@@ -12,6 +12,8 @@ class GameMachine {
     GameMachine();
     ~GameMachine();
 
+    void possible_transition(GameMachineState *new_state);
+
     Client *client_for_listener(UDPSocket &listener);
     void tick();
 

@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include <client.hpp>
 #include <enemy.hpp>
 
@@ -21,6 +23,9 @@ GameMachineState* GameMachineStateCombat::tick(GameMachine& machine)
     client->player.hit(*machine.enemy);
     if(machine.enemy->stats.is_dead()) {
       LOG(INFO) << "LETHAL BLOW!";
+      std::stringstream message;
+      message << "KILLED " << enemy.name;
+      client->socket.send(message.str());
       return new GameMachineStateEnemyDied();
     }
   }
@@ -34,4 +39,3 @@ void GameMachineStateCombat::onEnter()
 void GameMachineStateCombat::onExit()
 {
 }
-

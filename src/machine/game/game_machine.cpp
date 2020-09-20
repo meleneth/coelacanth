@@ -29,7 +29,11 @@ Client* GameMachine::client_for_listener(UDPSocket &listener) {
 
 void GameMachine::tick()
 {
-  auto new_state = state_->tick(*this);
+  possible_transition(state_->tick(*this));
+}
+
+void GameMachine::possible_transition(GameMachineState *new_state)
+{
   if(new_state) {
     state_->onExit();
     delete state_;
