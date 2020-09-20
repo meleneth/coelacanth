@@ -1,6 +1,6 @@
-#include "easylogging++.h"
+#include <coelacanth_types.hpp>
 
-#include <udp_socket.hpp>
+#include "udp_socket.hpp"
 
 using namespace Coelacanth;
 

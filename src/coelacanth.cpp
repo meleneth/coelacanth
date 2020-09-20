@@ -9,8 +9,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "easylogging++.h"
-
 #include<list>
 #include<sstream>
 
@@ -59,6 +57,7 @@ void entry_serve() {
       }
     } else if (listener.buffer.starts_with("HEARTBEAT")) {
       ticker.tick();
+      game_machine.tick();
       for (auto client : game_machine.clients) {
         client->socket.send("TICK tick_id");
       }

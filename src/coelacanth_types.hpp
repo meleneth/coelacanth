@@ -1,6 +1,8 @@
 #ifndef COELACANTH_HPP
 #define COELACANTH_HPP
 
+#include "easylogging++.h"
+
 #include <map>
 #include <string>
 #include <vector>

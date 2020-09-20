@@ -9,6 +9,10 @@ class Stats {
     ~Stats();
 
     int health;
+    int max_health;
+    int xp;
+    int attack;
+    int level;
 
     bool is_dead();
 };
