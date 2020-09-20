@@ -60,12 +60,8 @@ void entry_serve() {
     listener.recv();
     if (listener.buffer.starts_with("HELO ")) {
       std::string name = std::string((char *)listener.buffer.storage + 5);
-//      LOG(INFO) << "[seRve] server got HELO for : " << name;
 
       client_for_listener(listener);
-      // machine: ClientConnection
-      // machine.event(listener.buffer)
-  //    LOG(INFO) << "[seRve] server got: " << listener.buffer.storage;
       std::stringstream reply;
       reply << "WELCOME " << name;
       for (auto client : clients) {

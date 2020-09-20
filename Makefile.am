@@ -15,6 +15,14 @@ src_libcoelacanth_a_SOURCES = \
   src/engine/game_server.hpp \
   src/engine/udp_socket.cpp \
   src/engine/udp_socket.hpp \
+  src/game/enemy.cpp \
+  src/game/enemy.hpp \
+  src/game/player.cpp \
+  src/game/player.hpp \
+  src/game/stats.cpp \
+  src/game/stats.hpp \
+  src/game/weapon.cpp \
+  src/game/weapon.hpp \
   src/machine/ticker/ticker_machine.cpp \
   src/machine/ticker/ticker_machine.hpp \
   src/machine/ticker/ticker_machine_state.cpp \

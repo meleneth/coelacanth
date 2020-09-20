@@ -15,6 +15,10 @@ namespace Coelacanth {
   class GameTickState;
   class GameTickStateTick;
   class GameTickStateTock;
+  class Player;
+  class Enemy;
+  class Stats;
+  class Weapon;
   typedef std::list<GameClient> GameClientList;
   typedef std::list<UDPSocket *> UDPSocketList;
 }
