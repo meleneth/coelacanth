@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "coelacanth_types.hpp"
 
 #include "data_buffer.hpp"
@@ -18,7 +20,7 @@ DataBuffer::~DataBuffer()
 }
 
 bool DataBuffer::starts_with(std::string needle) {
-  if((int) this->active_length < (int)needle.length()) {
+  if((int32_t) this->active_length < (int32_t)needle.length()) {
     return false;
   }
   for(unsigned int i = 0; i < needle.length(); ++i) {
@@ -27,4 +29,13 @@ bool DataBuffer::starts_with(std::string needle) {
     }
   }
   return true;
+}
+
+void DataBuffer::add_value(int32_t value) {
+  if((ssize_t)(active_length + sizeof(value)) > buffer_length) {
+    throw std::runtime_error("attempted to store too much in a databuffer");
+  }
+  int32_t* location = (int32_t *)(storage + active_length);
+  *location = value;
+  active_length += sizeof(value);
 }

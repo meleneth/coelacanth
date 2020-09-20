@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include<list>
 #include<sstream>
@@ -82,10 +83,29 @@ void entry_client(std::string name) {
   }
 }
 
+void entry_test() {
+  DataBuffer my_buffer(5000);
+  my_buffer.add_value(1023);
+  assert(my_buffer.active_length == 4);
+  assert(my_buffer.storage[0] == 255);
+  assert(my_buffer.storage[1] == 3);
+  assert(my_buffer.storage[2] == 0);
+  assert(my_buffer.storage[3] == 0);
+  my_buffer.add_value(1023);
+  assert(my_buffer.storage[4] == 255);
+  assert(my_buffer.storage[5] == 3);
+  assert(my_buffer.storage[6] == 0);
+  assert(my_buffer.storage[7] == 0);
+  LOG(INFO) << "All Passed!";
+}
+
 int main(int argc, char *argv[]) {
   el::Loggers::configureFromGlobal(".logging.conf");
 
   if (argc > 1) {
+    if (strcmp(argv[1], "test") == 0) {
+      entry_test();
+    }
     if (strcmp(argv[1], "heartbeat") == 0) {
       entry_heartbeat();
     }
