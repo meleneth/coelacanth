@@ -23,6 +23,14 @@ src_libcoelacanth_a_SOURCES = \
   src/game/stats.hpp \
   src/game/weapon.cpp \
   src/game/weapon.hpp \
+  src/machine/game/game_machine.cpp \
+  src/machine/game/game_machine.hpp \
+  src/machine/game/game_machine_state.cpp \
+  src/machine/game/game_machine_state.hpp \
+  src/machine/game/game_machine_state_combat.cpp \
+  src/machine/game/game_machine_state_combat.hpp \
+  src/machine/game/game_machine_state_enemy_died.cpp \
+  src/machine/game/game_machine_state_enemy_died.hpp \
   src/machine/ticker/ticker_machine.cpp \
   src/machine/ticker/ticker_machine.hpp \
   src/machine/ticker/ticker_machine_state.cpp \
