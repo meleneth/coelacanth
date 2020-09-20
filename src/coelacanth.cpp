@@ -80,7 +80,7 @@ void entry_client(std::string name) {
 }
 
 int main(int argc, char *argv[]) {
-  el::Loggers::configureFromGlobal("/home/meleneth/.logging.conf");
+  el::Loggers::configureFromGlobal(".logging.conf");
 
   if (argc > 1) {
     if (strcmp(argv[1], "heartbeat") == 0) {

@@ -2,7 +2,8 @@
 #define CLIENT_HPP
 
 #include "coelacanth_types.hpp"
-#include "udp_socket.hpp"
+
+#include <udp_socket.hpp>
 #include "player.hpp"
 
 namespace Coelacanth {

@@ -1,0 +1,40 @@
+XP gain / level gain
+
+multiple monsters alive at the same time
+
+Enemies:
+enemy definitions - enemies should be easy / hard and have different names and have different stats / levels
+enemies should do damage to players
+players should die if they don't recall fast enough
+
+Persistence:
+persistance of player accounts
+persistance of player characters
+
+equipment:
+weapons
+armor
+abilities
+
+stats:
+define what the stats do
+gain stats as you level, and at max level quaff stat potions to increase up to max
+
+classes:
+players should have different abilities based on what class they are playing, or what skills they have unlocked.  Make a decision.
+
+Code:
+StateMachine base class, to give possible_transition a home
+
+player controls:
+ability to 'chicken' - go to the end of the player line, heal to max.  Maybe sit out of combat a few rounds?
+
+attack speed - get out of turn based combat and go to Real Time combat
+
+seperate 'client connected' from 'client engaged in combat' / 'player engaged in level'
+
+GameLoop:
+battle harder and harder monsters, until 'enough monsters have died'.  Start a special event.  After the event, rinse repeat.
+
+
+AHEM GRAPHICS
