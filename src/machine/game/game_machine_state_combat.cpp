@@ -1,4 +1,9 @@
+#include <client.hpp>
+#include <enemy.hpp>
+
 #include "game_machine_state_combat.hpp"
+#include "game_machine_state_enemy_died.hpp"
+
 
 using namespace Coelacanth;
 
@@ -13,9 +18,19 @@ GameMachineStateCombat::~GameMachineStateCombat()
 GameMachineState* GameMachineStateCombat::tick(GameMachine& machine)
 {
   for(auto client : machine.clients) {
-    client->player.hit(machine.enemy);
-    if(machine.enemy.is_dead()) {
-      return new GameMachineStateEnemyDied()
+    client->player.hit(*machine.enemy);
+    if(machine.enemy->stats.is_dead()) {
+      return new GameMachineStateEnemyDied();
     }
   }
+  return nullptr;
 }
+
+void GameMachineStateCombat::onEnter()
+{
+}
+
+void GameMachineStateCombat::onExit()
+{
+}
+

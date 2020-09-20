@@ -1,6 +1,7 @@
-#include "game_machine_state_enemy_died.hpp"
+#include <enemy.hpp>
 
 #include "game_machine_state_enemy_died.hpp"
+#include "game_machine_state_combat.hpp"
 
 using namespace Coelacanth;
 
@@ -13,6 +14,11 @@ GameMachineStateEnemyDied::~GameMachineStateEnemyDied()
 }
 
 void GameMachineStateEnemyDied::onEnter()
+{
+
+}
+
+void GameMachineStateEnemyDied::onExit()
 {
 
 }

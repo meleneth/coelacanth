@@ -2,8 +2,9 @@
 
 using namespace Coelacanth;
 
-Enemy::Enemy()
+Enemy::Enemy(std::string name)
 {
+  this->name = name;
 }
 
 Enemy::~Enemy()

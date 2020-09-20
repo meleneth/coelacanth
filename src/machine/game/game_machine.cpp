@@ -27,7 +27,7 @@ Client* GameMachine::client_for_listener(UDPSocket &listener) {
   return client;
 }
 
-GameMachine::tick()
+void GameMachine::tick()
 {
   auto new_state = state_->tick(*this);
   if(new_state) {
@@ -41,7 +41,7 @@ GameMachine::tick()
 void GameMachine::create_enemy()
 {
   enemy = new Enemy("Slug");
-  enemy.stats.xp = 5;
-  enemy.stats.attack = 5;
-  enemy.stats.health = 20;
+  enemy->stats.xp = 5;
+  enemy->stats.attack = 5;
+  enemy->stats.health = 20;
 }

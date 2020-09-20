@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "player.hpp"
+#include "enemy.hpp"
 
 using namespace Coelacanth;
 

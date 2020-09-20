@@ -10,7 +10,7 @@ namespace Coelacanth {
 
 class Enemy {
   public:
-    Enemy();
+    Enemy(std::string name);
     ~Enemy();
 
     std::string name;

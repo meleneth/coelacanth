@@ -9,3 +9,16 @@ GameMachineState::GameMachineState()
 GameMachineState::~GameMachineState()
 {
 }
+
+void GameMachineState::onEnter()
+{
+}
+
+void GameMachineState::onExit()
+{
+}
+
+GameMachineState* GameMachineState::tick(GameMachine& machine)
+{
+  return nullptr;
+}

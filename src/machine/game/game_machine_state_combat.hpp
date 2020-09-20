@@ -8,7 +8,7 @@
 
 namespace Coelacanth {
 
-class GameMachineStateCombat : GameMachineState {
+class GameMachineStateCombat : public GameMachineState {
   public:
     GameMachineStateCombat();
     virtual ~GameMachineStateCombat();
