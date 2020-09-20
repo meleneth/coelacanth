@@ -35,5 +35,5 @@ src_libcoelacanth_a_SOURCES = \
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
 
 # Linux
-AM_CXXFLAGS = -g -fno-inline @LUA_INCLUDE@ -Wall -I/usr/include/lua5.1 -I/usr/local/include -I/www/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -I/usr/include/freetype2 -I external
-bin_coelacanth_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -llua5.1 -lSDL2 -lSDL2_image -lSDL2_mixer -lftgl -lGLEW
+AM_CXXFLAGS = -g -fno-inline -Wall -I/usr/local/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -I external
+bin_coelacanth_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer

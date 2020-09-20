@@ -30,7 +30,6 @@ AX_CXX_COMPILE_STDCXX_17()
 # these are now autodetected
 AC_CHECK_LIB([z], [zlibVersion])
 AC_CHECK_LIB([m], [acos])
-AC_CHECK_LIB([lua], [luaopen_math])
 AC_CHECK_LIB([ogg], [oggpack_writeinit])
 AC_CHECK_LIB([lzma], [lzma_index_buffer_decode])
 AC_CHECK_LIB([vorbis], [vorbis_info_init])
@@ -43,8 +42,6 @@ AC_CHECK_LIB([GL], [glEnd])
 #AC_CHECK_LIB([SDL_image], [IMG_Load]) this was sdl1.2
 
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS([boost/foreach.hpp], [],
-    [AC_MSG_ERROR(You need the Boost libraries, atleast version 1.49.0)])
 AC_LANG_POP([C++])
 
 # these are still not working correctly, bastards!  So we are currently forceing them with LDADD
