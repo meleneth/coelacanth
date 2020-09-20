@@ -1,6 +1,6 @@
 #include "game_machine_state_enemy_died.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 GameMachineStateEnemyDied::GameMachineStateEnemyDied()
 {

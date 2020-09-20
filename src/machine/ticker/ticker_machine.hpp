@@ -7,8 +7,6 @@
 
 namespace Coelacanth {
 
-class TickerMachineState;
-
 class TickerMachine {
   public:
     TickerMachine();

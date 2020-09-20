@@ -1,6 +1,6 @@
 #include "game_machine.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 GameMachine::GameMachine()
 {

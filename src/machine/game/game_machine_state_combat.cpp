@@ -1,6 +1,6 @@
 #include "game_machine_state_combat.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 GameMachineStateCombat::GameMachineStateCombat()
 {

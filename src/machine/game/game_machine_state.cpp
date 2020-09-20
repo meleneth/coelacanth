@@ -1,6 +1,6 @@
 #include "game_machine_state.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 GameMachineState::GameMachineState()
 {

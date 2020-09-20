@@ -5,7 +5,7 @@
 
 #include "game_machine.hpp"
 
-namespace Coelcalanth {
+namespace Coelacanth {
 
 class GameMachineState {
   public:

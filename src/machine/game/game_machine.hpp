@@ -1,7 +1,11 @@
 #ifndef GAME_MACHINE_HPP
 #define GAME_MACHINE_HPP
 
-namespace Coelcalanth {
+#include "coelacanth_types.hpp"
+
+#include "game_machine_state.hpp"
+
+namespace Coelacanth {
 
 class GameMachine {
   public:
