@@ -13,6 +13,8 @@ class Enemy {
     Enemy(std::string name);
     ~Enemy();
 
+    void hit(Player& player);
+
     std::string name;
     Stats stats;
 };

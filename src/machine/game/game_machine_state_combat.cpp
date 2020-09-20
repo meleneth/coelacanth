@@ -1,5 +1,7 @@
 #include <sstream>
 
+#include <random_selector.hpp>
+
 #include <client.hpp>
 #include <enemy.hpp>
 
@@ -27,6 +29,19 @@ GameMachineState* GameMachineStateCombat::tick(GameMachine& machine)
       message << "KILLED " << machine.enemy->name;
       client->socket.send(message.str());
       return new GameMachineStateEnemyDied();
+    }
+  }
+  //  LOG(INFO) << "GOING IN!";
+  if(machine.clients.size()) {
+    auto target = random_selector<Client*> (machine.clients);
+    std::stringstream message;
+    machine.enemy->hit(target->player);
+    if(target->player.stats.is_dead()) {
+      LOG(INFO) << "PLAYER KILLED!";
+      std::stringstream message;
+      message << "KILLEDBY " << machine.enemy->name;
+      target->socket.send(message.str());
+      target->player.stats.health = target->player.stats.max_health;
     }
   }
   return nullptr;

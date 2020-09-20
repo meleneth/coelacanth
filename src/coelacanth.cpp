@@ -40,10 +40,10 @@ void entry_serve() {
   listener.listen(4095);
 
   GameMachine game_machine;
-  TickerMachine ticker;
+//  TickerMachine ticker;
 
   while(1) {
-    LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
+    //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
     if (listener.buffer.starts_with("HELO ")) {
       std::string name = std::string((char *)listener.buffer.storage + 5);
@@ -56,7 +56,7 @@ void entry_serve() {
         client->socket.send(reply.str());
       }
     } else if (listener.buffer.starts_with("HEARTBEAT")) {
-      ticker.tick();
+      //ticker.tick();
       game_machine.tick();
       for (auto client : game_machine.clients) {
         client->socket.send("TICK tick_id");
@@ -73,9 +73,12 @@ void entry_client(std::string name) {
   sender.connect_to("127.0.0.1", 4095);
   sender.send("HELO " + name);
   while(1) {
-    LOG(INFO) << "[cLient] waiting to recvfrom...";
+    //LOG(INFO) << "[cLient] waiting to recvfrom...";
     sender.recv();
-    LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
+    if (sender.buffer.starts_with("TICK ")) {
+    } else {
+      LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
+    }
   }
 }
 

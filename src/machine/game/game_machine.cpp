@@ -47,5 +47,5 @@ void GameMachine::create_enemy()
   enemy = new Enemy("Slug");
   enemy->stats.xp = 5;
   enemy->stats.attack = 5;
-  enemy->stats.health = 20;
+  enemy->stats.health = 50;
 }

@@ -6,6 +6,8 @@ ACLOCAL_AMFLAGS = -I m4
 src_libcoelacanth_a_SOURCES = \
   src/client.cpp \
   src/client.hpp \
+  src/random_selector.hpp \
+  src/easylogging++.hpp \
   src/coelacanth_types.hpp \
   src/engine/data_buffer.cpp \
   src/engine/data_buffer.hpp \
