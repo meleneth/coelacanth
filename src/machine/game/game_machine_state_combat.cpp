@@ -24,7 +24,7 @@ GameMachineState* GameMachineStateCombat::tick(GameMachine& machine)
     if(machine.enemy->stats.is_dead()) {
       LOG(INFO) << "LETHAL BLOW!";
       std::stringstream message;
-      message << "KILLED " << enemy.name;
+      message << "KILLED " << machine.enemy->name;
       client->socket.send(message.str());
       return new GameMachineStateEnemyDied();
     }
