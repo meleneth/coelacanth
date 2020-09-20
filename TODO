@@ -1,6 +1,10 @@
 XP gain / level gain
 
-multiple monsters alive at the same time
+multiple monsters alive at the same time + players declaring targets
+  enemy ID
+  server tells clients about living enemies
+  client tells server which enemy it is attacking
+  clients have differing strategies for picking which enemy to attack
 
 Enemies:
 enemy definitions - enemies should be easy / hard and have different names and have different stats / levels
@@ -36,5 +40,17 @@ seperate 'client connected' from 'client engaged in combat' / 'player engaged in
 GameLoop:
 battle harder and harder monsters, until 'enough monsters have died'.  Start a special event.  After the event, rinse repeat.
 
+Loot Tables:
+should exist
+
+Dungeons:
+should exist, players can choose to participate or not
+
+Event Support:
+Daily Login Calendar
+base game + custom modifiers
+  Add special spawns when certain monsters killed
+  Add items to loot tables
+  Special dungeons
 
 AHEM GRAPHICS
