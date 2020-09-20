@@ -20,6 +20,7 @@ GameMachineState* GameMachineStateCombat::tick(GameMachine& machine)
   for(auto client : machine.clients) {
     client->player.hit(*machine.enemy);
     if(machine.enemy->stats.is_dead()) {
+      LOG(INFO) << "LETHAL BLOW!";
       return new GameMachineStateEnemyDied();
     }
   }
