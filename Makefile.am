@@ -4,15 +4,13 @@ bin_PROGRAMS = bin/coelacanth
 ACLOCAL_AMFLAGS = -I m4
 
 src_libcoelacanth_a_SOURCES = \
+  src/client.cpp \
+  src/client.hpp \
   src/coelacanth_types.hpp \
   src/engine/data_buffer.cpp \
   src/engine/data_buffer.hpp \
   src/engine/game_bot.cpp \
   src/engine/game_bot.hpp \
-  src/engine/game_client.cpp \
-  src/engine/game_client.hpp \
-  src/engine/game_server.cpp \
-  src/engine/game_server.hpp \
   src/engine/udp_socket.cpp \
   src/engine/udp_socket.hpp \
   src/game/enemy.cpp \
@@ -43,5 +41,5 @@ src_libcoelacanth_a_SOURCES = \
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
 
 # Linux
-AM_CXXFLAGS = -g -fno-inline -Wall -I/usr/local/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -I external
+AM_CXXFLAGS = -g -fno-inline -Wall -I/usr/local/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -Isrc/game -I external
 bin_coelacanth_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer

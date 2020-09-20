@@ -1,7 +1,7 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
-namespace Coelcalanth {
+namespace Coelacanth {
 
 class Weapon {
   public:

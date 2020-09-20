@@ -4,7 +4,7 @@
 #include "coelacanth_types.hpp"
 #include "stats.hpp"
 
-namespace Coelcalanth {
+namespace Coelacanth {
 
 class Player {
   public:

@@ -14,28 +14,16 @@
 #include<list>
 #include<sstream>
 
+#include "client.hpp"
 #include "coelacanth_types.hpp"
 #include "engine/udp_socket.hpp"
+#include "machine/game/game_machine.hpp"
 #include "machine/ticker/ticker_machine.hpp"
 
 using namespace Coelacanth;
 
 INITIALIZE_EASYLOGGINGPP
 
-UDPSocketList clients;
-
-UDPSocket *client_for_listener(UDPSocket &listener) {
-  for (auto client : clients) {
-    if ( client->remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
-      return client;
-    }
-  }
-  auto client = new UDPSocket();
-  client->fd = listener.fd;
-  client->remoteaddr = listener.remoteaddr;
-  clients.push_back(client);
-  return client;
-}
 
 void entry_heartbeat() {
   UDPSocket sender;
@@ -53,6 +41,7 @@ void entry_serve() {
 
   listener.listen(4095);
 
+  GameMachine game_machine;
   TickerMachine ticker;
 
   while(1) {
@@ -61,16 +50,17 @@ void entry_serve() {
     if (listener.buffer.starts_with("HELO ")) {
       std::string name = std::string((char *)listener.buffer.storage + 5);
 
-      client_for_listener(listener);
+      auto new_client = game_machine.client_for_listener(listener);
+      new_client->player.name = name;
       std::stringstream reply;
       reply << "WELCOME " << name;
-      for (auto client : clients) {
-        client->send(reply.str());
+      for (auto client : game_machine.clients) {
+        client->socket.send(reply.str());
       }
     } else if (listener.buffer.starts_with("HEARTBEAT")) {
       ticker.tick();
-      for (auto client : clients) {
-        client->send("TICK tick_id");
+      for (auto client : game_machine.clients) {
+        client->socket.send("TICK tick_id");
       }
     } else {
       LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;

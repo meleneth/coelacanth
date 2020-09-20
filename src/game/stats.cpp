@@ -1,6 +1,6 @@
 #include "stats.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 Stats::Stats()
 {

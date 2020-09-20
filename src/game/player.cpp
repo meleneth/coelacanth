@@ -1,9 +1,10 @@
 #include "player.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 Player::Player()
 {
+  this->name = "NotSetPlayerName";
 }
 
 Player::~Player()

@@ -12,8 +12,12 @@ class GameMachine {
     GameMachine();
     ~GameMachine();
 
+    Client *client_for_listener(UDPSocket &listener);
+
     GameMachineState* state_;
     Enemy *enemy;
+
+    ClientList clients;
 };
 
 }

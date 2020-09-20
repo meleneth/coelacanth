@@ -1,6 +1,6 @@
 #include "enemy.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 Enemy::Enemy()
 {

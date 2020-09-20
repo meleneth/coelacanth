@@ -1,7 +1,7 @@
 #ifndef STATS_HPP
 #define STATS_HPP
 
-namespace Coelcalanth {
+namespace Coelacanth {
 
 class Stats {
   public:

@@ -7,24 +7,23 @@
 #include <list>
 
 namespace Coelacanth {
-  class GameClient;
-  class GameServer;
-  class UDPSocket;
+  class Client;
   class DataBuffer;
+  class Enemy;
+  class GameMachine;
   class GameMachineState;
   class GameMachineStateCombat;
   class GameMachineStateEnemyDied;
-  class GameMachine;
+  class Player;
+  class Stats;
   class TickerMachine;
+  class TickerMachine;
+  class TickerMachineState;
   class TickerMachineStateTick;
   class TickerMachineStateTock;
-  class TickerMachineState;
-  class TickerMachine;
-  class Player;
-  class Enemy;
-  class Stats;
+  class UDPSocket;
   class Weapon;
-  typedef std::list<GameClient> GameClientList;
+  typedef std::list<Client *> ClientList;
   typedef std::list<UDPSocket *> UDPSocketList;
 }
 

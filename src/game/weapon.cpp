@@ -1,6 +1,6 @@
 #include "weapon.hpp"
 
-using namespace Coelcalanth;
+using namespace Coelacanth;
 
 Weapon::Weapon()
 {
