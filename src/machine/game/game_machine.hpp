@@ -7,6 +7,9 @@ class GameMachine {
   public:
     GameMachine();
     ~GameMachine();
+
+    GameMachineState* state_;
+    Enemy *enemy;
 };
 
 }

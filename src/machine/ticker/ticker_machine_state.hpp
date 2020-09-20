@@ -18,6 +18,7 @@ class TickerMachineState {
 
     virtual void onEnter();
     virtual void onExit();
+
 };
 
 }

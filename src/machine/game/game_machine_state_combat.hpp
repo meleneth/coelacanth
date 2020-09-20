@@ -1,12 +1,21 @@
 #ifndef GAME_MACHINE_STATE_COMBAT_HPP
 #define GAME_MACHINE_STATE_COMBAT_HPP
 
+#include "coelacanth_types.hpp"
+
+#include "game_machine.hpp"
+#include "game_machine_state.hpp"
+
 namespace Coelcalanth {
 
-class GameMachineStateCombat {
+class GameMachineStateCombat : GameMachineState {
   public:
     GameMachineStateCombat();
-    ~GameMachineStateCombat();
+    virtual ~GameMachineStateCombat();
+
+    virtual GameMachineState* tick(GameMachine& machine);
+    virtual void onEnter();
+    virtual void onExit();
 };
 
 }
