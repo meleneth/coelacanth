@@ -27,6 +27,8 @@ namespace Coelacanth {
   class Weapon;
   typedef std::list<Client *> ClientList;
   typedef std::list<UDPSocket *> UDPSocketList;
+  typedef int PositionType;
+  typedef struct { PositionType x; PositionType y; } Position;
 }
 
 #endif

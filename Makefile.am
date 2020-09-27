@@ -1,5 +1,5 @@
 noinst_LIBRARIES = src/libcoelacanth.a
-bin_PROGRAMS = bin/coelacanth
+bin_PROGRAMS = bin/coelacanth bin/central_dispatch bin/heartbeat bin/worldserver bin/roomserver
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -41,7 +41,15 @@ src_libcoelacanth_a_SOURCES = \
   src/machine/ticker/ticker_machine_state_tock.hpp
 
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
+bin_central_dispatch_SOURCES = src/central_dispatch.cpp src/easylogging++.cc src/easylogging++.h
+bin_heartbeat_SOURCES = src/heartbeat.cpp src/easylogging++.cc src/easylogging++.h
+bin_worldserver_SOURCES = src/worldserver.cpp src/easylogging++.cc src/easylogging++.h
+bin_roomserver_SOURCES = src/roomserver.cpp src/easylogging++.cc src/easylogging++.h
 
 # Linux
 AM_CXXFLAGS = -g -fno-inline -Wall -I/usr/local/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -Isrc/game -I external
 bin_coelacanth_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer
+bin_central_dispatch_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer
+bin_heartbeat_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer
+bin_worldserver_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer
+bin_roomserver_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer

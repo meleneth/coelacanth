@@ -10,6 +10,8 @@ class Player {
   public:
     Player();
     ~Player();
+    
+    Position location;
 
     void hit(Enemy& enemy);
 

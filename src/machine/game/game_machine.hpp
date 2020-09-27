@@ -3,8 +3,6 @@
 
 #include "coelacanth_types.hpp"
 
-#include "game_machine_state.hpp"
-
 namespace Coelacanth {
 
 class GameMachine {

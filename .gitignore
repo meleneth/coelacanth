@@ -9,6 +9,10 @@ depcomp
 install-sh
 bin/*.exe
 bin/coelacanth
+bin/central_dispatch
+bin/heartbeat
+bin/worldserver
+bin/roomserver
 bin/mapeditor
 *.swp
 stamp-h1
