@@ -27,7 +27,7 @@ INITIALIZE_EASYLOGGINGPP
 
 void entry_heartbeat(int port_no, int delay) {
   UDPSocket sender;
-  LOG(INFO) << "can you feel my heartbeat";
+  LOG(INFO) << "can you feel my heartbeat: " << port_no << " every " << delay;
   sender.connect_to("127.0.0.1", port_no);
   while(1) {
     sender.send("HEARTBEAT");
@@ -49,6 +49,6 @@ int main(int argc, const char *argv[]) {
   int port_no = result["port"].as<int>();
   int delay = result["delay"].as<int>();
   entry_heartbeat(port_no, delay);
-  LOG(INFO) << "ending program";
+  LOG(INFO) << "ending heartbeat program";
   return 0;
 }

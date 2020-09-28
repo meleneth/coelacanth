@@ -37,37 +37,6 @@ void entry_heartbeat() {
 }
 
 void entry_serve() {
-  LOG(INFO) << "starting serve";
-  UDPSocket listener;
-
-  listener.listen(4095);
-
-  GameMachine game_machine;
-//  TickerMachine ticker;
-
-  while(1) {
-    //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
-    listener.recv();
-    if (listener.buffer.starts_with("HELO ")) {
-      std::string name = std::string((char *)listener.buffer.storage + 5);
-
-      auto new_client = game_machine.client_for_listener(listener);
-      new_client->player.name = name;
-      std::stringstream reply;
-      reply << "WELCOME " << name;
-      for (auto client : game_machine.clients) {
-        client->socket.send(reply.str());
-      }
-    } else if (listener.buffer.starts_with("HEARTBEAT")) {
-      //ticker.tick();
-      game_machine.tick();
-      for (auto client : game_machine.clients) {
-        client->socket.send("TICK tick_id");
-      }
-    } else {
-      LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
-    }
-  }
 }
 
 void entry_client(std::string name) {
@@ -104,7 +73,40 @@ void entry_test() {
 void entry_roomserver(std::string name, int listen_port, int report_port) {
   UDPSocket sender;
   sender.connect_to("127.0.0.1", report_port);
+  LOG(INFO) << "[roomserver] starting serve";
+
+  UDPSocket listener;
+  listener.listen(listen_port);
+
+  GameMachine game_machine;
+//  TickerMachine ticker;
+  sender.send("SERVREADY server_token_id");
   sender.send("ROOMREADY " + name);
+
+  while(1) {
+    //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
+    listener.recv();
+    if (listener.buffer.starts_with("HELO ")) {
+      std::string name = std::string((char *)listener.buffer.storage + 5);
+
+      auto new_client = game_machine.client_for_listener(listener);
+      new_client->player.name = name;
+      std::stringstream reply;
+      reply << "WELCOME " << name;
+      for (auto client : game_machine.clients) {
+        client->socket.send(reply.str());
+      }
+    } else if (listener.buffer.starts_with("HEARTBEAT")) {
+      LOG(INFO) << "[roomserver] HEARTBEAT";
+      //ticker.tick();
+      game_machine.tick();
+      for (auto client : game_machine.clients) {
+        client->socket.send("TICK tick_id");
+      }
+    } else {
+      LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
+    }
+  }
 }
 
 int main(int argc, const char *argv[]) {
@@ -113,9 +115,9 @@ int main(int argc, const char *argv[]) {
   cxxopts::Options options("roomserver", "Run a dungeon, be the DM see the world they said");
 
   options.add_options()
-    ("l,port", "Port number to listen to", cxxopts::value<int>())
+    ("l,listen_port", "Port number to listen to", cxxopts::value<int>())
     ("r,report_port", "Port number of CentralDispatch to report back to", cxxopts::value<int>())
-    ("n,name", "Port number to listen on for new connections", cxxopts::value<int>())
+    ("n,name", "name of room to serve", cxxopts::value<std::string>())
     ;
 
   auto result = options.parse(argc, argv);

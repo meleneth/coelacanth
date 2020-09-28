@@ -102,8 +102,8 @@ void entry_test() {
 }
 
 void entry_worldserver(int port_no, int report_port_no, std::string token) {
-  LOG(INFO) << "Listeningback on port " << port_no;
-  LOG(INFO) << "Sassing back on port " << report_port_no;
+  LOG(INFO) << "[worldserver] Listening on port " << port_no;
+  LOG(INFO) << "[worldserver] Sassing on port " << report_port_no;
   UDPSocket listener;
   UDPSocket sender;
 
