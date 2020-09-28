@@ -23,101 +23,32 @@ using namespace Coelacanth;
 
 INITIALIZE_EASYLOGGINGPP
 
+#include<cxxopts.hpp>
 
-void entry_heartbeat() {
+void entry_heartbeat(int port_no, int delay) {
   UDPSocket sender;
   LOG(INFO) << "can you feel my heartbeat";
-  sender.connect_to("127.0.0.1", 4095);
+  sender.connect_to("127.0.0.1", port_no);
   while(1) {
     sender.send("HEARTBEAT");
-    usleep(2500000);
+    usleep(delay);
   }
 }
 
-void entry_serve() {
-  LOG(INFO) << "starting serve";
-  UDPSocket listener;
-
-  listener.listen(4095);
-
-  GameMachine game_machine;
-//  TickerMachine ticker;
-
-  while(1) {
-    //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
-    listener.recv();
-    if (listener.buffer.starts_with("HELO ")) {
-      std::string name = std::string((char *)listener.buffer.storage + 5);
-
-      auto new_client = game_machine.client_for_listener(listener);
-      new_client->player.name = name;
-      std::stringstream reply;
-      reply << "WELCOME " << name;
-      for (auto client : game_machine.clients) {
-        client->socket.send(reply.str());
-      }
-    } else if (listener.buffer.starts_with("HEARTBEAT")) {
-      //ticker.tick();
-      game_machine.tick();
-      for (auto client : game_machine.clients) {
-        client->socket.send("TICK tick_id");
-      }
-    } else {
-      LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
-    }
-  }
-}
-
-void entry_client(std::string name) {
-  LOG(INFO) << "[cLient] starting client " << name;
-  UDPSocket sender;
-  sender.connect_to("127.0.0.1", 4095);
-  sender.send("HELO " + name);
-  while(1) {
-    //LOG(INFO) << "[cLient] waiting to recvfrom...";
-    sender.recv();
-    if (sender.buffer.starts_with("TICK ")) {
-    } else {
-      LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
-    }
-  }
-}
-
-void entry_test() {
-  DataBuffer my_buffer(5000);
-  my_buffer.add_value(1023);
-  assert(my_buffer.active_length == 4);
-  assert(my_buffer.storage[0] == 255);
-  assert(my_buffer.storage[1] == 3);
-  assert(my_buffer.storage[2] == 0);
-  assert(my_buffer.storage[3] == 0);
-  my_buffer.add_value(1023);
-  assert(my_buffer.storage[4] == 255);
-  assert(my_buffer.storage[5] == 3);
-  assert(my_buffer.storage[6] == 0);
-  assert(my_buffer.storage[7] == 0);
-  LOG(INFO) << "All Passed!";
-}
-
-int main(int argc, char *argv[]) {
+int main(int argc, const char *argv[]) {
   el::Loggers::configureFromGlobal(".logging.conf");
 
-  if (argc > 1) {
-    if (strcmp(argv[1], "test") == 0) {
-      entry_test();
-    }
-    if (strcmp(argv[1], "heartbeat") == 0) {
-      entry_heartbeat();
-    }
-    if (strcmp(argv[1], "serve") == 0) {
-      entry_serve();
-    }
-    if (argc == 3) {
-      if (strcmp(argv[1], "client") == 0) {
-        entry_client(argv[2]);
-      }
-    }
-  }
+  cxxopts::Options options("worldserver", "Bounce users to a newly spawned dungeon");
+
+  options.add_options()
+    ("p,port", "Port number to listen on for new connections", cxxopts::value<int>())
+    ("d,delay", "delay time between heartbeat 2500000", cxxopts::value<int>())
+    ;
+
+  auto result = options.parse(argc, argv);
+  int port_no = result["port"].as<int>();
+  int delay = result["delay"].as<int>();
+  entry_heartbeat(port_no, delay);
   LOG(INFO) << "ending program";
   return 0;
 }

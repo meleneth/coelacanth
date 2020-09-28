@@ -13,6 +13,8 @@
 #include<list>
 #include<sstream>
 
+#include<cxxopts.hpp>
+
 #include "client.hpp"
 #include "coelacanth_types.hpp"
 #include "engine/udp_socket.hpp"
@@ -99,25 +101,62 @@ void entry_test() {
   LOG(INFO) << "All Passed!";
 }
 
-int main(int argc, char *argv[]) {
-  el::Loggers::configureFromGlobal(".logging.conf");
+void entry_worldserver(int port_no, int report_port_no, std::string token) {
+  LOG(INFO) << "Listeningback on port " << port_no;
+  LOG(INFO) << "Sassing back on port " << report_port_no;
+  UDPSocket listener;
+  UDPSocket sender;
 
-  if (argc > 1) {
-    if (strcmp(argv[1], "test") == 0) {
-      entry_test();
-    }
-    if (strcmp(argv[1], "heartbeat") == 0) {
-      entry_heartbeat();
-    }
-    if (strcmp(argv[1], "serve") == 0) {
-      entry_serve();
-    }
-    if (argc == 3) {
-      if (strcmp(argv[1], "client") == 0) {
-        entry_client(argv[2]);
-      }
+  listener.listen(port_no);
+  sender.connect_to("127.0.0.1", report_port_no);
+  sender.send("SERVREADY " + token);
+
+  //WorldMachine world_machine;
+//  TickerMachine ticker;
+
+  while(1) {
+    //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
+    listener.recv();
+    if (listener.buffer.starts_with("HELO ")) {
+      std::string name = std::string((char *)listener.buffer.storage + 5);
+
+      //auto new_client = game_machine.client_for_listener(listener);
+      //new_client->player.name = name;
+      //std::stringstream reply;
+      //reply << "WELCOME " << name;
+      //for (auto client : game_machine.clients) {
+      //  client->socket.send(reply.str());
+      //}
+    } else if (listener.buffer.starts_with("HEARTBEAT")) {
+      //ticker.tick();
+      //game_machine.tick();
+      //for (auto client : game_machine.clients) {
+      //  client->socket.send("TICK tick_id");
+      //}
+    } else {
+      LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
     }
   }
+}
+
+int main(int argc, const char *argv[]) {
+  el::Loggers::configureFromGlobal(".logging.conf");
+
+  cxxopts::Options options("worldserver", "Bounce users to a newly spawned dungeon");
+
+  options.add_options()
+    ("l,port", "Port number to listen on for new connections", cxxopts::value<int>())
+    ("r,report_port", "Port number of CentralDispatch to report back to", cxxopts::value<int>())
+    ("t,token", "Token to pass back to CentralDispatch as proof of work", cxxopts::value<std::string>())
+    ;
+
+  auto result = options.parse(argc, argv);
+  int port_no = result["port"].as<int>();
+  int report_port_no = result["report_port"].as<int>();
+  std::string token = result["token"].as<std::string>();
+
+  entry_worldserver(port_no, report_port_no, token);
+
   LOG(INFO) << "ending program";
   return 0;
 }

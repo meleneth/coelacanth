@@ -11,7 +11,10 @@
 #include <assert.h>
 
 #include<list>
+#include<string>
 #include<sstream>
+
+#include<spawn.h>
 
 #include "client.hpp"
 #include "coelacanth_types.hpp"
@@ -21,103 +24,107 @@
 
 using namespace Coelacanth;
 
+#define CENTRAL_DISPATCH_PORT 12393
+
 INITIALIZE_EASYLOGGINGPP
 
-
-void entry_heartbeat() {
-  UDPSocket sender;
-  LOG(INFO) << "can you feel my heartbeat";
-  sender.connect_to("127.0.0.1", 4095);
-  while(1) {
-    sender.send("HEARTBEAT");
-    usleep(2500000);
-  }
+int next_port()
+{
+  static int new_port = CENTRAL_DISPATCH_PORT + 24;
+  new_port = new_port + 1;
+  return new_port;
 }
 
-void entry_serve() {
-  LOG(INFO) << "starting serve";
+void run_in_background(std::string command, std::string arguments) {
+	int pid = fork();
+	if (pid == 0)
+	{
+			execl(command.c_str(), arguments.c_str(), nullptr);
+			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
+			exit(1);
+	}
+	return;	
+}
+
+void start_world_server(std::string name) 
+{
+
+  std::string world_server_port = std::to_string(next_port());
+  
+  std::string listen_port = std::to_string(next_port());
+  std::string report_port = std::to_string(CENTRAL_DISPATCH_PORT);
+
+	int pid = fork();
+	if (pid == 0)
+	{
+			execl("./bin/worldserver", "./bin/worldserver", "-l", listen_port.c_str(), "-r", report_port.c_str(), "-t", "some_token", (const char *) 0);
+			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
+			exit(1);
+	}
+
+	pid = fork();
+	if (pid == 0)
+	{
+			execl("./bin/heartbeat", "./bin/hearbeat", "-d", "2500000", "-p", report_port.c_str(), (const char *) 0);
+			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
+			exit(1);
+	}
+
+	pid = fork();
+	if (pid == 0)
+	{
+			execl("./bin/coelacanth", "./bin/coelacanth", "-u", "MelX", "-p", world_server_port.c_str(), (const char *) 0);
+			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
+			exit(1);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+			execl("./bin/coelacanth", "./bin/coelacanth", "-u", "zYz", "-p", world_server_port.c_str(), (const char *) 0);
+			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
+			exit(1);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+			execl("./bin/coelacanth", "./bin/coelacanth", "-u", "DocVentur", "-p", world_server_port.c_str(), (const char *) 0);
+			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
+			exit(1);
+	}
+
+
+}
+
+// Start the Main World Server with appropriate arguments
+// provide service that opens new world / room servers
+void entry_central_dispatch() {
+  //CentralDispatchMachine central_dispatch;
+  // Start a WorldServer, so game clients have something to connect to
+  // Listen for requests from servers
   UDPSocket listener;
+  listener.listen(CENTRAL_DISPATCH_PORT);
 
-  listener.listen(4095);
-
-  GameMachine game_machine;
-//  TickerMachine ticker;
+  start_world_server("USWest2");
 
   while(1) {
     //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
-    if (listener.buffer.starts_with("HELO ")) {
-      std::string name = std::string((char *)listener.buffer.storage + 5);
-
-      auto new_client = game_machine.client_for_listener(listener);
-      new_client->player.name = name;
-      std::stringstream reply;
-      reply << "WELCOME " << name;
-      for (auto client : game_machine.clients) {
-        client->socket.send(reply.str());
-      }
-    } else if (listener.buffer.starts_with("HEARTBEAT")) {
-      //ticker.tick();
-      game_machine.tick();
-      for (auto client : game_machine.clients) {
-        client->socket.send("TICK tick_id");
-      }
+    if (listener.buffer.starts_with("HELLO ")) {
+      std::string name = std::string((char *)listener.buffer.storage + 6);
+      LOG(INFO) << "Cleanly got ";
+      LOG(INFO) << name;
     } else {
       LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
     }
   }
-}
 
-void entry_client(std::string name) {
-  LOG(INFO) << "[cLient] starting client " << name;
-  UDPSocket sender;
-  sender.connect_to("127.0.0.1", 4095);
-  sender.send("HELO " + name);
-  while(1) {
-    //LOG(INFO) << "[cLient] waiting to recvfrom...";
-    sender.recv();
-    if (sender.buffer.starts_with("TICK ")) {
-    } else {
-      LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
-    }
-  }
-}
-
-void entry_test() {
-  DataBuffer my_buffer(5000);
-  my_buffer.add_value(1023);
-  assert(my_buffer.active_length == 4);
-  assert(my_buffer.storage[0] == 255);
-  assert(my_buffer.storage[1] == 3);
-  assert(my_buffer.storage[2] == 0);
-  assert(my_buffer.storage[3] == 0);
-  my_buffer.add_value(1023);
-  assert(my_buffer.storage[4] == 255);
-  assert(my_buffer.storage[5] == 3);
-  assert(my_buffer.storage[6] == 0);
-  assert(my_buffer.storage[7] == 0);
-  LOG(INFO) << "All Passed!";
 }
 
 int main(int argc, char *argv[]) {
   el::Loggers::configureFromGlobal(".logging.conf");
 
-  if (argc > 1) {
-    if (strcmp(argv[1], "test") == 0) {
-      entry_test();
-    }
-    if (strcmp(argv[1], "heartbeat") == 0) {
-      entry_heartbeat();
-    }
-    if (strcmp(argv[1], "serve") == 0) {
-      entry_serve();
-    }
-    if (argc == 3) {
-      if (strcmp(argv[1], "client") == 0) {
-        entry_client(argv[2]);
-      }
-    }
-  }
+  entry_central_dispatch();
+
   LOG(INFO) << "ending program";
   return 0;
 }

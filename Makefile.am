@@ -7,7 +7,8 @@ src_libcoelacanth_a_SOURCES = \
   src/client.cpp \
   src/client.hpp \
   src/random_selector.hpp \
-  src/easylogging++.hpp \
+  src/external/easylogging++.hpp \
+  src/external/cxxopts.hpp \
   src/coelacanth_types.hpp \
   src/engine/data_buffer.cpp \
   src/engine/data_buffer.hpp \
@@ -38,16 +39,28 @@ src_libcoelacanth_a_SOURCES = \
   src/machine/ticker/ticker_machine_state_tick.cpp \
   src/machine/ticker/ticker_machine_state_tick.hpp \
   src/machine/ticker/ticker_machine_state_tock.cpp \
-  src/machine/ticker/ticker_machine_state_tock.hpp
+  src/machine/ticker/ticker_machine_state_tock.hpp \
+  src/machine/world/world_machine.cpp \
+  src/machine/world/world_machine.hpp \
+  src/machine/world/world_machine_state.cpp \
+  src/machine/world/world_machine_state.hpp \
+  src/machine/world/world_machine_state_construct.cpp \
+  src/machine/world/world_machine_state_construct.hpp \
+  src/machine/world/world_machine_state_end.cpp \
+  src/machine/world/world_machine_state_end.hpp \
+  src/machine/world/world_machine_state_populate.cpp \
+  src/machine/world/world_machine_state_populate.hpp \
+  src/machine/world/world_machine_state_simulate.cpp \
+  src/machine/world/world_machine_state_simulate.hpp
 
-bin_coelacanth_SOURCES = src/coelacanth.cpp src/easylogging++.cc src/easylogging++.h
-bin_central_dispatch_SOURCES = src/central_dispatch.cpp src/easylogging++.cc src/easylogging++.h
-bin_heartbeat_SOURCES = src/heartbeat.cpp src/easylogging++.cc src/easylogging++.h
-bin_worldserver_SOURCES = src/worldserver.cpp src/easylogging++.cc src/easylogging++.h
-bin_roomserver_SOURCES = src/roomserver.cpp src/easylogging++.cc src/easylogging++.h
+bin_coelacanth_SOURCES = src/coelacanth.cpp src/external/easylogging++.cc src/easylogging++.h
+bin_central_dispatch_SOURCES = src/central_dispatch.cpp src/external/easylogging++.cc src/easylogging++.h
+bin_heartbeat_SOURCES = src/heartbeat.cpp src/external/easylogging++.cc src/easylogging++.h
+bin_worldserver_SOURCES = src/worldserver.cpp src/external/easylogging++.cc src/easylogging++.h
+bin_roomserver_SOURCES = src/roomserver.cpp src/external/easylogging++.cc src/easylogging++.h
 
 # Linux
-AM_CXXFLAGS = -g -fno-inline -Wall -I/usr/local/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -Isrc/game -I external
+AM_CXXFLAGS = -g -fno-inline -Wall -I/usr/local/include -D_GNU_SOURCE=1 -D_THREAD_SAFE -Isrc -Isrc/engine -Isrc/game -Isrc/external
 bin_coelacanth_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer
 bin_central_dispatch_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer
 bin_heartbeat_LDADD = -L/usr/lib -L/usr/local/lib -L/usr/local/lib -L/usr/lib/i386-linux-gnu -Lsrc src/libcoelacanth.a -lSDL2 -lSDL2_image -lSDL2_mixer

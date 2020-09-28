@@ -1,0 +1,8 @@
+1 CentralDispatch -> runs processes and notices when ports come back available because of clean vs not responding shutdown
+1 GameBrowserServer -> Allows client connection to login, can transfer you to a WorldServer
+5 WorldServer -> One Realm (spacestation)
+many RoomServer -> dungeon etc
+
+CentralDispatch should clean up child processes when it is killed
+
+
