@@ -22,7 +22,7 @@ void CentralDispatchMachineState::onExit(CentralDispatchMachine& machine)
 
 CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer)
 {
-  LOG(INFO) << "[cD] " << buffer;
+  LOG(INFO) << "[cD:Ms] " << buffer;
   if(buffer->starts_with("HEARTBEAT")) {
     return new CentralDispatchMachineStateHeartbeat();
   }

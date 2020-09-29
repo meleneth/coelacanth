@@ -117,6 +117,7 @@ void entry_central_dispatch() {
   // Listen for requests from servers
   UDPSocket listener;
   listener.listen(CENTRAL_DISPATCH_PORT);
+  LOG(INFO) << "[cDp] Listening on port " << CENTRAL_DISPATCH_PORT;
 
   start_world_server("USWest2");
 
