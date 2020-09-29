@@ -29,8 +29,13 @@ namespace Coelacanth {
   class TickerMachineStateTock;
   class UDPSocket;
   class Weapon;
+  class WorldServerMachine;
+  class WorldServerMachineState;
+  class WorldServerMachineStateHeartbeat;
+  class WorldServerMachineStateDead;
   typedef std::list<Client *> ClientList;
   typedef std::list<UDPSocket *> UDPSocketList;
+  typedef std::list<WorldServerMachine *> WorldServerMachineList;
   typedef int PositionType;
   typedef std::list<CentralDispatchMachine *> CentralDispatchMachineList;
   typedef struct { PositionType x; PositionType y; } Position;

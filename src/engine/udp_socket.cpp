@@ -86,3 +86,7 @@ void UDPSocket::send(std::string message) {
     exit(1);
   }
 }
+
+bool UDPSocket::is_for(UDPSocket* other_socket) {
+  return other_socket->remoteaddr.sin_port == remoteaddr.sin_port;
+}

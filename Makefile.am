@@ -32,6 +32,8 @@ src_libcoelacanth_a_SOURCES = \
   src/machine/central_dispatch/central_dispatch_machine_state_connected.hpp \
   src/machine/central_dispatch/central_dispatch_machine_state_dead.cpp \
   src/machine/central_dispatch/central_dispatch_machine_state_dead.hpp \
+  src/machine/central_dispatch/central_dispatch_machine_state_heartbeat.cpp \
+  src/machine/central_dispatch/central_dispatch_machine_state_heartbeat.hpp \
   src/machine/game/game_machine.cpp \
   src/machine/game/game_machine.hpp \
   src/machine/game/game_machine_state.cpp \
@@ -59,7 +61,19 @@ src_libcoelacanth_a_SOURCES = \
   src/machine/world/world_machine_state_populate.cpp \
   src/machine/world/world_machine_state_populate.hpp \
   src/machine/world/world_machine_state_simulate.cpp \
-  src/machine/world/world_machine_state_simulate.hpp
+  src/machine/world/world_machine_state_simulate.hpp \
+  src/machine/world_server/world_server_machine.cpp \
+  src/machine/world_server/world_server_machine.hpp \
+  src/machine/world_server/world_server_machine_state.cpp \
+  src/machine/world_server/world_server_machine_state.hpp \
+  src/machine/world_server/world_server_machine_state_login.cpp \
+  src/machine/world_server/world_server_machine_state_login.hpp \
+  src/machine/world_server/world_server_machine_state_recall.cpp \
+  src/machine/world_server/world_server_machine_state_recall.hpp \
+  src/machine/world_server/world_server_machine_state_room_join.cpp \
+  src/machine/world_server/world_server_machine_state_room_join.hpp \
+  src/machine/world_server/world_server_machine_state_welcome.cpp \
+  src/machine/world_server/world_server_machine_state_welcome.hpp 
 
 bin_coelacanth_SOURCES = src/coelacanth.cpp src/external/easylogging++.cc src/easylogging++.h
 bin_central_dispatch_SOURCES = src/central_dispatch.cpp src/external/easylogging++.cc src/easylogging++.h

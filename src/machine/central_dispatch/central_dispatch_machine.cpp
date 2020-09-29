@@ -30,5 +30,5 @@ void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* ne
 
 void CentralDispatchMachine::parse_packet()
 {
-  possible_transition(state_->parse_packet(socket->buffer));
+  possible_transition(state_->parse_packet(*this, &socket->buffer));
 }

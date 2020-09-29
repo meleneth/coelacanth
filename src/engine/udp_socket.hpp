@@ -28,6 +28,8 @@ public:
   void connect_to(std::string hostname, int port);
   void send(std::string message);
 
+  bool is_for(UDPSocket* other_socket);
+
   struct sockaddr_in myaddr;
   struct sockaddr_in remoteaddr;
   socklen_t addrlen = sizeof(remoteaddr);

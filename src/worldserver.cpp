@@ -20,6 +20,7 @@
 #include "engine/udp_socket.hpp"
 #include "machine/game/game_machine.hpp"
 #include "machine/ticker/ticker_machine.hpp"
+#include "machine/world_server/world_server_machine.hpp"
 
 using namespace Coelacanth;
 
@@ -101,6 +102,25 @@ void entry_test() {
   LOG(INFO) << "All Passed!";
 }
 
+WorldServerMachineList clients;
+
+WorldServerMachine* add_client(UDPSocket *listener) {
+  auto client = new WorldServerMachine(listener);
+  clients.push_back(client);
+  return client;
+}
+
+void handle_packet(UDPSocket *listener) {
+  for ( auto client : clients ) {
+    if(client->socket->is_for(listener)) {
+      client->parse_packet(&listener->buffer);
+      return;
+    }
+  }
+  auto client = add_client(listener);
+  client->parse_packet(&listener->buffer);
+}
+
 void entry_worldserver(int port_no, int report_port_no, std::string token) {
   LOG(INFO) << "[worldserver] Listening on port " << port_no;
   LOG(INFO) << "[worldserver] Sassing on port " << report_port_no;
@@ -117,8 +137,8 @@ void entry_worldserver(int port_no, int report_port_no, std::string token) {
   while(1) {
     //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
-    if (listener.buffer.starts_with("HELO ")) {
-      std::string name = std::string((char *)listener.buffer.storage + 5);
+    if (listener.buffer.starts_with("LOGIN ")) {
+      std::string name = std::string((char *)listener.buffer.storage + 6);
 
       //auto new_client = game_machine.client_for_listener(listener);
       //new_client->player.name = name;
