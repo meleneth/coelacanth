@@ -9,6 +9,10 @@
 #include <list>
 
 namespace Coelacanth {
+  class CentralDispatchMachine;
+  class CentralDispatchMachineState;
+  class CentralDispatchMachineStateConnected;
+  class CentralDispatchMachineStateDead;
   class Client;
   class DataBuffer;
   class Enemy;
@@ -28,6 +32,7 @@ namespace Coelacanth {
   typedef std::list<Client *> ClientList;
   typedef std::list<UDPSocket *> UDPSocketList;
   typedef int PositionType;
+  typedef std::list<CentralDispatchMachine *> CentralDispatchMachineList;
   typedef struct { PositionType x; PositionType y; } Position;
 }
 

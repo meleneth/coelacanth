@@ -5,9 +5,9 @@ many RoomServer -> dungeon etc
 
 CentralDispatch should clean up child processes when it is killed
 
-genclassfile machine central_dispatch connected dead -e heartbeat -e server_ready -e server_quit
-genclassfile machine world_server login welcome room_join recall -e heartbeat -e room_join
-genclassfile machine room_server start client_ready client_join -e heartbeat -e recall
+genclassfile machine central_dispatch connected dead -e heartbeat -e server_ready -e server_quit -e parse_packet
+genclassfile machine world_server login welcome room_join recall -e heartbeat -e room_join -e login
+genclassfile machine room_server start client_ready client_join -e heartbeat -e parse_packet -e recall
 
 CentralDispatch - start all processes, keep track of which ports are active
 ---------------
@@ -17,24 +17,23 @@ CentralDispatch - start all processes, keep track of which ports are active
 (sends to all connected servers)
 >HEARTBEAT tick_id
 
+<SERVERQUIT token_id
+
 WorldServer - Process initial user connections, introduce users to RoomServers and know which roomserver is the nexus
 -----------
-<LOGIN username
-<PASSWORD username
+
+<LOGIN username password
 (creates session linking port to username because password matched)
-(all connected players)
->WELCOME player_id player_name
+>(P) HELLO player_id
+>(ACP) WELCOME player_id player_name
 
-(all connected players)
->HEARTBEAT tick_id
+>(ACP) HEARTBEAT tick_id
 
-(all connected players)
->ROOMOPEN room_id
+>(ACP) ROOMOPEN room_id
 
 <ROOMJOIN room_id
-(to room server)
->RDYCLIENT player_id
-<CLIENTRDY player_id token_id
+>(RS) RDYCLIENT player_id
+<(SELF) CLIENTRDY player_id token_id
 (to client)
 >GOROOM token_id port_no
 

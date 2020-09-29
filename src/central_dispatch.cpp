@@ -21,12 +21,15 @@
 #include "engine/udp_socket.hpp"
 #include "machine/game/game_machine.hpp"
 #include "machine/ticker/ticker_machine.hpp"
+#include "machine/central_dispatch/central_dispatch_machine.hpp"
 
 using namespace Coelacanth;
 
 #define CENTRAL_DISPATCH_PORT 12393
 
 INITIALIZE_EASYLOGGINGPP
+
+CentralDispatchMachineList clients;
 
 int next_port()
 {
@@ -35,17 +38,13 @@ int next_port()
   return new_port;
 }
 
-UDPSocketList clients;
-
-UDPSocket* client_for_listener(UDPSocket &listener) {
+CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
   for (auto client : clients) {
-    if ( client->remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
+    if ( client->socket->remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
       return client;
     }
   }
-  auto client = new UDPSocket();
-  client->fd = listener.fd;
-  client->remoteaddr = listener.remoteaddr;
+  auto client = new CentralDispatchMachine(&listener);
   clients.push_back(client);
   return client;
 }
@@ -126,20 +125,19 @@ void entry_central_dispatch() {
     listener.recv();
 //    LOG(INFO) << "[cDp] listener.recv()";
     LOG(INFO) << "[cDp] " << std::string((char *)listener.buffer.storage);
-    LOG(INFO) << std::string((char *)listener.buffer.storage);
-    if (listener.buffer.starts_with("SERVREADY ")) {
+    if (listener.buffer.starts_with("HEARTBEAT")) {
+      LOG(INFO) << "[cDp] Passing HEARTBEAT to all clients..";
+      for (auto client : clients) {
+        LOG(INFO) << "[cDp] Passing HEARTBEAT to client";
+        client->socket->send("HEARTBEAT beat_id");
+      }
+    } else if (listener.buffer.starts_with("SERVREADY ")) {
       std::string name = std::string((char *)listener.buffer.storage + 10);
-      LOG(INFO) << "Cleanly got ";
+      LOG(INFO) << "[cDp] Cleanly got ";
       LOG(INFO) << name;
       client_for_listener(listener);
-    } else if (listener.buffer.starts_with("HEARTBEAT")) {
-      LOG(INFO) << "Passing HEARTBEAT to all clients..";
-      for (auto client : clients) {
-        LOG(INFO) << "Passing HEARTBEAT to client";
-        client->send("HEARTBEAT beat_id");
-      }
     } else {
-      LOG(INFO) << "central_dispatch says: get out of here with your " << listener.buffer.storage;
+      LOG(INFO) << "[cDp] watch out it's the cops says: get out of here with your " << listener.buffer.storage;
     }
   }
 

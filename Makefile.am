@@ -24,6 +24,14 @@ src_libcoelacanth_a_SOURCES = \
   src/game/stats.hpp \
   src/game/weapon.cpp \
   src/game/weapon.hpp \
+  src/machine/central_dispatch/central_dispatch_machine.cpp \
+  src/machine/central_dispatch/central_dispatch_machine.hpp \
+  src/machine/central_dispatch/central_dispatch_machine_state.cpp \
+  src/machine/central_dispatch/central_dispatch_machine_state.hpp \
+  src/machine/central_dispatch/central_dispatch_machine_state_connected.cpp \
+  src/machine/central_dispatch/central_dispatch_machine_state_connected.hpp \
+  src/machine/central_dispatch/central_dispatch_machine_state_dead.cpp \
+  src/machine/central_dispatch/central_dispatch_machine_state_dead.hpp \
   src/machine/game/game_machine.cpp \
   src/machine/game/game_machine.hpp \
   src/machine/game/game_machine_state.cpp \
