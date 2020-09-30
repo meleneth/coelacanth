@@ -19,7 +19,7 @@ void CentralDispatchMachineStateDead::onExit(CentralDispatchMachine& machine)
 {
 }
 
-CentralDispatchMachineState* CentralDispatchMachineStateDead::parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients)
+CentralDispatchMachineState* CentralDispatchMachineStateDead::parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
   return nullptr;
 }

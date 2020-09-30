@@ -42,7 +42,6 @@ CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
       return client;
     }
   }
-  LOG(INFO) << "[cDp] create new client for port " << client->socket.remoteaddr.sin_port;
   auto client = new CentralDispatchMachine(&listener);
   clients.push_back(client);
   return client;

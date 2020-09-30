@@ -22,7 +22,6 @@ CentralDispatchMachine::~CentralDispatchMachine()
 void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* new_state)
 {
   if(new_state) {
-    LOG(INFO) << "[cDp] CDMS state switched!"
     state_->onExit(*this);
     delete state_;
     state_ = new_state;
@@ -33,7 +32,7 @@ void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* ne
 void CentralDispatchMachine::heartbeat(CentralDispatchMachineList& clients)
 {
   for(auto client : clients) {
-    client->state_->heartbeat(*this);
+    client->state_->heartbeat(*this, clients);
   }
 }
 

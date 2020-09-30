@@ -12,10 +12,10 @@ class CentralDispatchMachineStateConnected : public CentralDispatchMachineState 
     CentralDispatchMachineStateConnected();
     virtual ~CentralDispatchMachineStateConnected();
 
-    virtual void onEnter(CentralDispatchMachine& machine);
-    virtual void onExit(CentralDispatchMachine& machine);
+    virtual void onEnter(CentralDispatchMachine& machine) override;
+    virtual void onExit(CentralDispatchMachine& machine) override;
 
-    virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients);
+    virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients) override;
 };
 
 }

@@ -8,11 +8,12 @@ using namespace Coelacanth;
 
 CentralDispatchMachineStateHeartbeat::CentralDispatchMachineStateHeartbeat()
 {
-  LOG(INFO) << "[cD:Ms] StateHeartbeat created!"
+  LOG(INFO) << "[cD:Ms] StateHeartbeat created! " << this;
 }
 
 CentralDispatchMachineStateHeartbeat::~CentralDispatchMachineStateHeartbeat()
 {
+  LOG(INFO) << "[cD:Ms] StateHeartbeat destroyed " << this;
 }
 
 void CentralDispatchMachineStateHeartbeat::onEnter(CentralDispatchMachine& machine)
@@ -23,9 +24,10 @@ void CentralDispatchMachineStateHeartbeat::onExit(CentralDispatchMachine& machin
 {
 }
 
-CentralDispatchMachineState* CentralDispatchMachineStateHeartbeat::parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients)
+CentralDispatchMachineState* CentralDispatchMachineStateHeartbeat::parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
-  if(buffer->starts_with("HEARTBEAT")) {
+  LOG(INFO) << "[cD:Ms] <Heartbeat> " << buffer.storage;
+  if(buffer.starts_with("HEARTBEAT")) {
     LOG(INFO) << "[cDp] Passing HEARTBEAT to all clients..";
     machine.heartbeat(clients);
   }

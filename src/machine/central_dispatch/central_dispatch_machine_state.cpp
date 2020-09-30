@@ -23,9 +23,7 @@ void CentralDispatchMachineState::onExit(CentralDispatchMachine& machine)
 
 CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
-  LOG(INFO) << "[cD:Ms] " << buffer.storage;
   if(buffer.starts_with("HEARTBEAT")) {
-    LOG(INFO) << " So we switch state here so wtf?";
     return new CentralDispatchMachineStateHeartbeat();
   }
   if (machine.listener->buffer.starts_with("SERVREADY ")) {
@@ -36,8 +34,6 @@ CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDi
   return nullptr;
 }
 
-void CentralDispatchMachineState::heartbeat(CentralDispatchMachine& machine)
+void CentralDispatchMachineState::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
 {
-  LOG(INFO) << "[cD:Ms] echo heartbeat";
-  machine.socket.send("HEARTBEAT");
 }
