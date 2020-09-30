@@ -27,7 +27,7 @@ void WorldServerMachine::possible_transition(WorldServerMachineState* new_state)
   }
 }
 
-void WorldServerMachine::parse_packet(DataBuffer* buffer)
+void WorldServerMachine::parse_packet(DataBuffer& buffer)
 {
   possible_transition(state_->parse_packet(*this, buffer));
 }

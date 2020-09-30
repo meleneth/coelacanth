@@ -13,6 +13,7 @@ class GameMachineState {
     virtual ~GameMachineState();
 
     virtual GameMachineState* tick(GameMachine& machine);
+
     virtual void onEnter();
     virtual void onExit();
 };

@@ -19,7 +19,7 @@ void WorldServerMachineStateRecall::onExit(WorldServerMachine& machine)
 {
 }
 
-WorldServerMachineState* WorldServerMachineStateRecall::parse_packet(WorldServerMachine& machine)
+WorldServerMachineState* WorldServerMachineStateRecall::parse_packet(WorldServerMachine& machine, DataBuffer& buffer)
 {
   return nullptr;
 }

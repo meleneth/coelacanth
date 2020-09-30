@@ -19,7 +19,7 @@ void WorldServerMachineStateLogin::onExit(WorldServerMachine& machine)
 {
 }
 
-WorldServerMachineState* WorldServerMachineStateLogin::parse_packet(WorldServerMachine& machine)
+WorldServerMachineState* WorldServerMachineStateLogin::parse_packet(WorldServerMachine& machine, DataBuffer& buffer)
 {
   return nullptr;
 }

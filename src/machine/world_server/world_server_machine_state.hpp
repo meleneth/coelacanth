@@ -9,9 +9,11 @@ class WorldServerMachineState {
   public:
     WorldServerMachineState();
     virtual ~WorldServerMachineState();
+
     virtual void onEnter(WorldServerMachine& machine);
     virtual void onExit(WorldServerMachine& machine);
-    virtual WorldServerMachineState* parse_packet(WorldServerMachine& machine, DataBuffer* buffer);
+
+    virtual WorldServerMachineState* parse_packet(WorldServerMachine& machine, DataBuffer& buffer);
 };
 
 }

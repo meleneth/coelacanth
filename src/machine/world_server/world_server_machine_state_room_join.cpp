@@ -19,7 +19,7 @@ void WorldServerMachineStateRoomJoin::onExit(WorldServerMachine& machine)
 {
 }
 
-WorldServerMachineState* WorldServerMachineStateRoomJoin::parse_packet(WorldServerMachine& machine)
+WorldServerMachineState* WorldServerMachineStateRoomJoin::parse_packet(WorldServerMachine& machine, DataBuffer& buffer)
 {
   return nullptr;
 }
