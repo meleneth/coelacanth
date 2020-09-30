@@ -10,8 +10,8 @@ using namespace Coelacanth;
 CentralDispatchMachine::CentralDispatchMachine(UDPSocket* server_socket)
 {
   state_ = new CentralDispatchMachineStateConnected();
-  socket->fd = server_socket->fd;
-  socket->remoteaddr = server_socket->remoteaddr;
+  socket.fd = server_socket->fd;
+  socket.remoteaddr = server_socket->remoteaddr;
 }
 
 CentralDispatchMachine::~CentralDispatchMachine()
@@ -23,12 +23,12 @@ void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* ne
   if(new_state) {
     state_->onExit(*this);
     delete state_;
-    state_->onEnter(*this);
     state_ = new_state;
+    state_->onEnter(*this);
   }
 }
 
-void CentralDispatchMachine::parse_packet()
+void CentralDispatchMachine::parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
-  possible_transition(state_->parse_packet(*this, &socket->buffer));
+  possible_transition(state_->parse_packet(*this, buffer, clients));
 }

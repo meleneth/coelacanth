@@ -22,8 +22,8 @@ void WorldServerMachine::possible_transition(WorldServerMachineState* new_state)
   if(new_state) {
     state_->onExit(*this);
     delete state_;
-    state_->onEnter(*this);
     state_ = new_state;
+    state_->onEnter(*this);
   }
 }
 

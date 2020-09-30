@@ -30,6 +30,7 @@ void entry_heartbeat(int port_no, int delay) {
   LOG(INFO) << "can you feel my heartbeat: " << port_no << " every " << delay;
   sender.connect_to("127.0.0.1", port_no);
   while(1) {
+    LOG(INFO) << "[hbx] send HEARTBEAT";
     sender.send("HEARTBEAT");
     usleep(delay);
   }

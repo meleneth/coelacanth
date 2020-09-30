@@ -40,7 +40,7 @@ int next_port()
 
 CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
   for (auto client : clients) {
-    if ( client->socket->remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
+    if ( client->socket.remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
       return client;
     }
   }
@@ -116,27 +116,26 @@ void entry_central_dispatch() {
   // Start a WorldServer, so game clients have something to connect to
   // Listen for requests from servers
   UDPSocket listener;
+  //LOG(INFO) << "[cDp] running listen()";
   listener.listen(CENTRAL_DISPATCH_PORT);
   LOG(INFO) << "[cDp] Listening on port " << CENTRAL_DISPATCH_PORT;
 
   start_world_server("USWest2");
 
   while(1) {
-//    LOG(INFO) << "[cDp] listener: waiting to recvfrom...";
     listener.recv();
-//    LOG(INFO) << "[cDp] listener.recv()";
-    LOG(INFO) << "[cDp] " << std::string((char *)listener.buffer.storage);
-    if (listener.buffer.starts_with("HEARTBEAT")) {
-      LOG(INFO) << "[cDp] Passing HEARTBEAT to all clients..";
-      for (auto client : clients) {
-        LOG(INFO) << "[cDp] Passing HEARTBEAT to client";
-        client->socket->send("HEARTBEAT beat_id");
-      }
-    } else if (listener.buffer.starts_with("SERVREADY ")) {
+
+    auto client = client_for_listener(listener);
+
+    client->parse_packet(listener.buffer, clients);
+
+    if (listener.buffer.starts_with("SERVREADY ")) {
       std::string name = std::string((char *)listener.buffer.storage + 10);
       LOG(INFO) << "[cDp] Cleanly got ";
       LOG(INFO) << name;
+      LOG(INFO) << "[cDp] Death, I summon thee";
       client_for_listener(listener);
+      LOG(INFO) << "[cDp] ACESS DENIED";
     } else {
       LOG(INFO) << "[cDp] watch out it's the cops says: get out of here with your " << listener.buffer.storage;
     }

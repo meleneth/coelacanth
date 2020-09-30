@@ -37,8 +37,8 @@ void GameMachine::possible_transition(GameMachineState *new_state)
   if(new_state) {
     state_->onExit();
     delete state_;
-    new_state->onEnter();
     state_ = new_state;
+    new_state->onEnter();
   }
 }
 

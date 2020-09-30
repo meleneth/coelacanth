@@ -3,6 +3,8 @@
 
 #include "coelacanth_types.hpp"
 
+#include "udp_socket.hpp"
+
 namespace Coelacanth {
 
 class CentralDispatchMachine {
@@ -12,10 +14,10 @@ class CentralDispatchMachine {
 
     void possible_transition(CentralDispatchMachineState* new_state);
     
-    virtual void parse_packet();
+    virtual void parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients);
     
     CentralDispatchMachineState * state_;
-    UDPSocket* socket;
+    UDPSocket socket;
 };
 
 }

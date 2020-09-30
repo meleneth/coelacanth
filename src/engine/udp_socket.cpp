@@ -64,6 +64,7 @@ void UDPSocket::listen(int port) {
   myaddr.sin_port = htons(port);
 
   if (bind(fd, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0) {
+    perror("bind");
     LOG(ERROR) << "bind failed for port " << myaddr.sin_port;
     return;
   }

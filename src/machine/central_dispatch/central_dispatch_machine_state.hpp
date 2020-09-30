@@ -3,15 +3,19 @@
 
 #include "coelacanth_types.hpp"
 
+#include "central_dispatch_machine.hpp"
+
 namespace Coelacanth {
 
 class CentralDispatchMachineState {
   public:
     CentralDispatchMachineState();
     virtual ~CentralDispatchMachineState();
+    
     virtual void onEnter(CentralDispatchMachine& machine);
     virtual void onExit(CentralDispatchMachine& machine);
-    virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer);
+
+    virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients);
 };
 
 }

@@ -20,10 +20,10 @@ void CentralDispatchMachineState::onExit(CentralDispatchMachine& machine)
 {
 }
 
-CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer)
+CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
-  LOG(INFO) << "[cD:Ms] " << buffer;
-  if(buffer->starts_with("HEARTBEAT")) {
+  LOG(INFO) << "[cD:Ms] " << buffer.storage;
+  if(buffer.starts_with("HEARTBEAT")) {
     return new CentralDispatchMachineStateHeartbeat();
   }
   return nullptr;
