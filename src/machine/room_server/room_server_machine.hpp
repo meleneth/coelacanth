@@ -11,7 +11,7 @@ class RoomServerMachine {
     RoomServerMachine(UDPSocket* server_sock);
     ~RoomServerMachine();
 
-    virtual void parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients);
+    virtual void parse_packet(DataBuffer& buffer, RoomServerMachineList& clients);
 
     void possible_transition(RoomServerMachineState* new_state);
     void heartbeat(RoomServerMachineList& clients);

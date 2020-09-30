@@ -15,6 +15,8 @@ src_libcoelacanth_a_SOURCES = \
   src/machine/room_server/room_server_machine_state_client_join.hpp \
   src/machine/room_server/room_server_machine_state_client_ready.cpp \
   src/machine/room_server/room_server_machine_state_client_ready.hpp \
+  src/machine/room_server/room_server_machine_state_heartbeat.cpp \
+  src/machine/room_server/room_server_machine_state_heartbeat.hpp \
   src/machine/room_server/room_server_machine_state_mob_fight.cpp \
   src/machine/room_server/room_server_machine_state_mob_fight.hpp \
   src/machine/room_server/room_server_machine_state_start.cpp \

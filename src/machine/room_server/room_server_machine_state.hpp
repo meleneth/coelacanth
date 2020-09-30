@@ -14,7 +14,7 @@ class RoomServerMachineState {
     virtual void onExit(RoomServerMachine& machine);
 
     virtual RoomServerMachineState* recall(RoomServerMachine& machine);
-    virtual RoomServerMachineState* parse_packet(RoomServerMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients);
+    virtual RoomServerMachineState* parse_packet(RoomServerMachine& machine, DataBuffer& buffer, RoomServerMachineList& clients);
 
     virtual void heartbeat(RoomServerMachine& machine, RoomServerMachineList& clients);
 };

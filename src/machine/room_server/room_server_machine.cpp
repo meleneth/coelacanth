@@ -38,7 +38,7 @@ void RoomServerMachine::heartbeat(RoomServerMachineList& clients)
   }
 }
 
-void RoomServerMachine::parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients)
+void RoomServerMachine::parse_packet(DataBuffer& buffer, RoomServerMachineList& clients)
 {
   possible_transition(state_->parse_packet(*this, buffer, clients));
 }

@@ -33,19 +33,16 @@ void entry_client(int port_no, std::string name) {
   while(1) {
     //LOG(INFO) << "[cLient] waiting to recvfrom...";
     sender.recv();
-    if (sender.buffer.starts_with("TICK ")) {
-    } else {
-      LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
-    }
+    LOG(INFO) << "[cLient] "<< name <<" got: " << sender.buffer.storage;
   }
 }
 
 int main(int argc, const char *argv[]) {
   el::Loggers::configureFromGlobal(".logging.conf");
 
-  cxxopts::Options options("worldserver", "Bounce users to a newly spawned dungeon");
+  cxxopts::Options options("coelacanth", "Connect as a user to the game");
   options.add_options()
-    ("p,port", "Port number to listen on for new connections", cxxopts::value<int>())
+    ("p,port", "Port number to connect to", cxxopts::value<int>())
     ("u,name", "Name of player to connect as", cxxopts::value<std::string>())
     ;
 

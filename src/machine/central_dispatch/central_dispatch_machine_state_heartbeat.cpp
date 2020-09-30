@@ -36,4 +36,5 @@ CentralDispatchMachineState* CentralDispatchMachineStateHeartbeat::parse_packet(
 
 void CentralDispatchMachineStateHeartbeat::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
 {
+  LOG(INFO) << "[cDp] Skipping heartbeat to hearbeat service";
 }

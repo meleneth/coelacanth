@@ -24,3 +24,10 @@ CentralDispatchMachineState* CentralDispatchMachineStateConnected::parse_packet(
   LOG(INFO) << "[cD:Ms] <Connected> " << machine.listener->buffer.storage;
   return nullptr;
 }
+
+void CentralDispatchMachineStateConnected::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
+{
+  LOG(INFO) << "[cDp] <Connected> Passing along HEARTBEAT";
+  machine.socket.send("HEARTBEAT");
+}
+

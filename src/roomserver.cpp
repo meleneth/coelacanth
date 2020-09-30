@@ -53,26 +53,8 @@ void entry_roomserver(std::string name, int listen_port, int report_port) {
   while(1) {
     //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
-    if (listener.buffer.starts_with("HELO ")) {
-      std::string name = std::string((char *)listener.buffer.storage + 5);
-
-      auto new_client = game_machine.client_for_listener(listener);
-      new_client->player.name = name;
-      std::stringstream reply;
-      reply << "WELCOME " << name;
-      for (auto client : game_machine.clients) {
-        client->socket.send(reply.str());
-      }
-    } else if (listener.buffer.starts_with("HEARTBEAT")) {
-      LOG(INFO) << "[roomserver] HEARTBEAT";
-      //ticker.tick();
-      game_machine.tick();
-      for (auto client : game_machine.clients) {
-        client->socket.send("TICK tick_id");
-      }
-    } else {
-      LOG(INFO) << "server says: get out of here with your " << listener.buffer.storage;
-    }
+    auto client = client_for_listener(listener);
+    client->parse_packet(listener.buffer, clients);
   }
 }
 
