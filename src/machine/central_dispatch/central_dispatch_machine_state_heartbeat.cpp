@@ -8,6 +8,7 @@ using namespace Coelacanth;
 
 CentralDispatchMachineStateHeartbeat::CentralDispatchMachineStateHeartbeat()
 {
+  LOG(INFO) << "[cD:Ms] StateHeartbeat created!"
 }
 
 CentralDispatchMachineStateHeartbeat::~CentralDispatchMachineStateHeartbeat()
@@ -31,6 +32,6 @@ CentralDispatchMachineState* CentralDispatchMachineStateHeartbeat::parse_packet(
   return nullptr;
 }
 
-void CentralDispatchMachineStateHeartbeat::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients) 
+void CentralDispatchMachineStateHeartbeat::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
 {
 }

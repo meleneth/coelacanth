@@ -42,6 +42,7 @@ CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
       return client;
     }
   }
+  LOG(INFO) << "[cDp] create new client for port " << client->socket.remoteaddr.sin_port;
   auto client = new CentralDispatchMachine(&listener);
   clients.push_back(client);
   return client;
@@ -69,12 +70,12 @@ int next_port()
   return new_port;
 }
 
-void start_world_server(std::string name) 
+void start_world_server(std::string name)
 {
   LOG(INFO) << "Starting worldserver " << name;
 
   std::string world_server_port = std::to_string(next_port());
-  
+
   std::string listen_port = std::to_string(next_port());
   std::string report_port = std::to_string(CENTRAL_DISPATCH_PORT);
 
