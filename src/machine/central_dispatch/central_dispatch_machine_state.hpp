@@ -16,6 +16,7 @@ class CentralDispatchMachineState {
     virtual void onExit(CentralDispatchMachine& machine);
 
     virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients);
+    virtual void heartbeat(CentralDispatchMachine& machine);
 };
 
 }

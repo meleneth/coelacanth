@@ -26,7 +26,7 @@ using namespace Coelacanth;
 INITIALIZE_EASYLOGGINGPP
 
 void entry_client(int port_no, std::string name) {
-  LOG(INFO) << "[cLient] starting client " << name;
+  LOG(INFO) << "[cLient] starting client " << name << " on port " << port_no;
   UDPSocket sender;
   sender.connect_to("127.0.0.1", port_no);
   sender.send("HELO " + name);

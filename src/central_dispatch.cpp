@@ -31,12 +31,10 @@ INITIALIZE_EASYLOGGINGPP
 
 CentralDispatchMachineList clients;
 
-int next_port()
-{
-  static int new_port = CENTRAL_DISPATCH_PORT + 24;
-  new_port = new_port + 1;
-  return new_port;
-}
+int next_port();
+CentralDispatchMachine* client_for_listener(UDPSocket& listener);
+void start_world_server(std::string name);
+void entry_central_dispatch();
 
 CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
   for (auto client : clients) {
@@ -47,6 +45,28 @@ CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
   auto client = new CentralDispatchMachine(&listener);
   clients.push_back(client);
   return client;
+}
+
+void entry_central_dispatch() {
+  UDPSocket listener;
+  listener.listen(CENTRAL_DISPATCH_PORT);
+  LOG(INFO) << "[cDp] Listening on port " << CENTRAL_DISPATCH_PORT;
+
+  start_world_server("USWest2");
+
+  while(1) {
+    listener.recv();
+
+    auto client = client_for_listener(listener);
+    client->parse_packet(listener.buffer, clients);
+  }
+}
+
+int next_port()
+{
+  static int new_port = CENTRAL_DISPATCH_PORT + 24;
+  new_port = new_port + 1;
+  return new_port;
 }
 
 void start_world_server(std::string name) 
@@ -106,40 +126,6 @@ void start_world_server(std::string name)
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}
-
-}
-
-// Start the Main World Server with appropriate arguments
-// provide service that opens new world / room servers
-void entry_central_dispatch() {
-  //CentralDispatchMachine central_dispatch;
-  // Start a WorldServer, so game clients have something to connect to
-  // Listen for requests from servers
-  UDPSocket listener;
-  //LOG(INFO) << "[cDp] running listen()";
-  listener.listen(CENTRAL_DISPATCH_PORT);
-  LOG(INFO) << "[cDp] Listening on port " << CENTRAL_DISPATCH_PORT;
-
-  start_world_server("USWest2");
-
-  while(1) {
-    listener.recv();
-
-    auto client = client_for_listener(listener);
-
-    client->parse_packet(listener.buffer, clients);
-
-    if (listener.buffer.starts_with("SERVREADY ")) {
-      std::string name = std::string((char *)listener.buffer.storage + 10);
-      LOG(INFO) << "[cDp] Cleanly got ";
-      LOG(INFO) << name;
-      LOG(INFO) << "[cDp] Death, I summon thee";
-      client_for_listener(listener);
-      LOG(INFO) << "[cDp] ACESS DENIED";
-    } else {
-      LOG(INFO) << "[cDp] watch out it's the cops says: get out of here with your " << listener.buffer.storage;
-    }
-  }
 
 }
 

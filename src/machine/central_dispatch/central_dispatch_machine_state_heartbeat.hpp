@@ -11,9 +11,12 @@ class CentralDispatchMachineStateHeartbeat : public CentralDispatchMachineState 
   public:
     CentralDispatchMachineStateHeartbeat();
     virtual ~CentralDispatchMachineStateHeartbeat();
+
     virtual void onEnter(CentralDispatchMachine& machine);
     virtual void onExit(CentralDispatchMachine& machine);
+
     virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients);
+    virtual void heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients);
 };
 
 }

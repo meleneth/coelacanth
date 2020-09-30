@@ -15,9 +15,11 @@ class CentralDispatchMachine {
     void possible_transition(CentralDispatchMachineState* new_state);
     
     virtual void parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients);
+    virtual void heartbeat(CentralDispatchMachineList& clients);
     
     CentralDispatchMachineState * state_;
     UDPSocket socket;
+    UDPSocket *listener;
 };
 
 }

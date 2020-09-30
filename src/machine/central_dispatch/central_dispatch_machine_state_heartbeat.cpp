@@ -25,12 +25,12 @@ void CentralDispatchMachineStateHeartbeat::onExit(CentralDispatchMachine& machin
 CentralDispatchMachineState* CentralDispatchMachineStateHeartbeat::parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients)
 {
   if(buffer->starts_with("HEARTBEAT")) {
-    LOG(INFO) << "[cDp] heartbeat state handled a heartbeat.  Go team!";
     LOG(INFO) << "[cDp] Passing HEARTBEAT to all clients..";
-    for (auto client : clients) {
-      LOG(INFO) << "[cDp] Passing HEARTBEAT to client";
-      client->socket.send("HEARTBEAT beat_id");
-    }
+    machine.heartbeat(clients);
   }
   return nullptr;
+}
+
+void CentralDispatchMachineStateHeartbeat::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients) 
+{
 }

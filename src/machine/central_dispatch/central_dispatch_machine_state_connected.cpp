@@ -19,7 +19,8 @@ void CentralDispatchMachineStateConnected::onExit(CentralDispatchMachine& machin
 {
 }
 
-CentralDispatchMachineState* CentralDispatchMachineStateConnected::parse_packet(CentralDispatchMachine& machine)
+CentralDispatchMachineState* CentralDispatchMachineStateConnected::parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients)
 {
+  LOG(INFO) << "[cD:Ms] <Connected> " << machine.listener->buffer.storage;
   return nullptr;
 }

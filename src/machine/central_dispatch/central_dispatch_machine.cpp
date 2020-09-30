@@ -9,7 +9,8 @@ using namespace Coelacanth;
 
 CentralDispatchMachine::CentralDispatchMachine(UDPSocket* server_socket)
 {
-  state_ = new CentralDispatchMachineStateConnected();
+  listener = server_socket;
+  state_ = new CentralDispatchMachineState();
   socket.fd = server_socket->fd;
   socket.remoteaddr = server_socket->remoteaddr;
 }
@@ -25,6 +26,13 @@ void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* ne
     delete state_;
     state_ = new_state;
     state_->onEnter(*this);
+  }
+}
+
+void CentralDispatchMachine::heartbeat(CentralDispatchMachineList& clients)
+{
+  for(auto client : clients) {
+    client->state_->heartbeat(*this);
   }
 }
 

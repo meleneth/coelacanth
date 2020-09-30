@@ -37,12 +37,12 @@ WorldServerMachine* add_client(UDPSocket *listener) {
 void handle_packet(UDPSocket *listener) {
   for ( auto client : clients ) {
     if(client->socket->is_for(listener)) {
-      client->parse_packet(&listener->buffer);
+      client->parse_packet(listener->buffer);
       return;
     }
   }
   auto client = add_client(listener);
-  client->parse_packet(&listener->buffer);
+  client->parse_packet(listener->buffer);
 }
 
 void entry_worldserver(int port_no, int report_port_no, std::string token) {

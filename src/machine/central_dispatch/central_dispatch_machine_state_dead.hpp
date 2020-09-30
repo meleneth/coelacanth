@@ -13,7 +13,7 @@ class CentralDispatchMachineStateDead : public CentralDispatchMachineState {
     virtual ~CentralDispatchMachineStateDead();
     virtual void onEnter(CentralDispatchMachine& machine);
     virtual void onExit(CentralDispatchMachine& machine);
-    virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine);
+    virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer* buffer, CentralDispatchMachineList& clients);
 };
 
 }

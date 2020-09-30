@@ -29,7 +29,7 @@ INITIALIZE_EASYLOGGINGPP
 void entry_roomserver(std::string name, int listen_port, int report_port) {
   UDPSocket sender;
   sender.connect_to("127.0.0.1", report_port);
-  LOG(INFO) << "[roomserver] starting serve";
+  LOG(INFO) << "[roomserver] starting serve on port " << listen_port;
 
   UDPSocket listener;
   listener.listen(listen_port);
