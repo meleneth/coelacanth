@@ -21,27 +21,27 @@ GameMachineStateCombat::~GameMachineStateCombat()
 
 GameMachineState* GameMachineStateCombat::tick(GameMachine& machine)
 {
-  for(auto client : machine.clients) {
-    client->player.hit(*machine.enemy);
+  for(auto player : machine.players) {
+    player->hit(*machine.enemy);
     if(machine.enemy->stats.is_dead()) {
       LOG(INFO) << "LETHAL BLOW!";
       std::stringstream message;
-      message << "KILLED " << machine.enemy->name;
-      client->socket.send(message.str());
+      //message << "KILLED " << machine.enemy->name;
+      //client->socket.send(message.str());
       return new GameMachineStateEnemyDied();
     }
   }
   //  LOG(INFO) << "GOING IN!";
-  if(machine.clients.size()) {
-    auto target = random_selector<Client*> (machine.clients);
+  if(machine.players.size()) {
+    auto target = random_selector<Player*> (machine.players);
     std::stringstream message;
-    machine.enemy->hit(target->player);
-    if(target->player.stats.is_dead()) {
+    machine.enemy->hit(*target);
+    if(target->stats.is_dead()) {
       LOG(INFO) << "PLAYER KILLED!";
       std::stringstream message;
-      message << "KILLEDBY " << machine.enemy->name;
-      target->socket.send(message.str());
-      target->player.stats.health = target->player.stats.max_health;
+      //message << "KILLEDBY " << machine.enemy->name;
+      //target->socket.send(message.str());
+      //target->player.stats.health = target->player.stats.max_health;
     }
   }
   return nullptr;

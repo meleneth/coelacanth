@@ -4,9 +4,10 @@
 
 using namespace Coelacanth;
 
-RoomServerMachine::RoomServerMachine(UDPSocket *server_socket)
+RoomServerMachine::RoomServerMachine(UDPSocket *server_socket, GameMachine *running_game)
 {
   listener = server_socket;
+  game = running_game;
   state_ = new RoomServerMachineState();
   socket.fd = server_socket->fd;
   socket.remoteaddr = server_socket->remoteaddr;

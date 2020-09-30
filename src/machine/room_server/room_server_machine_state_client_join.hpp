@@ -11,9 +11,12 @@ class RoomServerMachineStateClientJoin : public RoomServerMachineState {
   public:
     RoomServerMachineStateClientJoin();
     virtual ~RoomServerMachineStateClientJoin();
+
     virtual void onEnter(RoomServerMachine& machine);
     virtual void onExit(RoomServerMachine& machine);
+
     virtual RoomServerMachineState* recall(RoomServerMachine& machine);
+    virtual void heartbeat(RoomServerMachine& machine);
 };
 
 }

@@ -27,13 +27,13 @@ INITIALIZE_EASYLOGGINGPP
 
 RoomServerMachineList clients;
 
-RoomServerMachine* client_for_listener(UDPSocket &listener) {
+RoomServerMachine* client_for_listener(UDPSocket &listener, GameMachine *running_game) {
   for (auto client : clients) {
     if ( client->socket.remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
       return client;
     }
   }
-  auto client = new RoomServerMachine(&listener);
+  auto client = new RoomServerMachine(&listener, running_game);
   clients.push_back(client);
   return client;
 }
@@ -46,14 +46,14 @@ void entry_roomserver(std::string name, int listen_port, int report_port) {
   UDPSocket listener;
   listener.listen(listen_port);
 
-  GameMachine game_machine;
+  GameMachine game;
   sender.send("SERVREADY server_token_id");
   sender.send("ROOMREADY " + name);
 
   while(1) {
     //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
     listener.recv();
-    auto client = client_for_listener(listener);
+    auto client = client_for_listener(listener, &game);
     client->parse_packet(listener.buffer, clients);
   }
 }

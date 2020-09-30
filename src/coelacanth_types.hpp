@@ -38,6 +38,7 @@ namespace Coelacanth {
   typedef int PositionType;
   typedef std::list<CentralDispatchMachine *> CentralDispatchMachineList;
   typedef std::list<Client *> ClientList;
+  typedef std::list<Player *> PlayerList;
   typedef std::list<RoomServerMachine *> RoomServerMachineList;
   typedef std::list<UDPSocket *> UDPSocketList;
   typedef std::list<WorldServerMachine *> WorldServerMachineList;

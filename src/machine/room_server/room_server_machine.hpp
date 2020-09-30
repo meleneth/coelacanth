@@ -8,7 +8,7 @@ namespace Coelacanth {
 
 class RoomServerMachine {
   public:
-    RoomServerMachine(UDPSocket* server_sock);
+    RoomServerMachine(UDPSocket* server_sock, GameMachine *running_game);
     ~RoomServerMachine();
 
     virtual void parse_packet(DataBuffer& buffer, RoomServerMachineList& clients);
@@ -19,6 +19,9 @@ class RoomServerMachine {
     virtual void recall();
 
     RoomServerMachineState * state_;
+    
+    GameMachine *game;
+
     UDPSocket socket;
     UDPSocket *listener;
 };
