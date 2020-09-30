@@ -7,6 +7,18 @@ src_libcoelacanth_a_SOURCES = \
   src/client.cpp \
   src/client.hpp \
   src/random_selector.hpp \
+  src/machine/room_server/room_server_machine.cpp \
+  src/machine/room_server/room_server_machine.hpp \
+  src/machine/room_server/room_server_machine_state.cpp \
+  src/machine/room_server/room_server_machine_state.hpp \
+  src/machine/room_server/room_server_machine_state_client_join.cpp \
+  src/machine/room_server/room_server_machine_state_client_join.hpp \
+  src/machine/room_server/room_server_machine_state_client_ready.cpp \
+  src/machine/room_server/room_server_machine_state_client_ready.hpp \
+  src/machine/room_server/room_server_machine_state_mob_fight.cpp \
+  src/machine/room_server/room_server_machine_state_mob_fight.hpp \
+  src/machine/room_server/room_server_machine_state_start.cpp \
+  src/machine/room_server/room_server_machine_state_start.hpp \
   src/external/easylogging++.hpp \
   src/external/cxxopts.hpp \
   src/coelacanth_types.hpp \

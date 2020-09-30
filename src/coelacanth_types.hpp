@@ -33,11 +33,14 @@ namespace Coelacanth {
   class WorldServerMachineState;
   class WorldServerMachineStateHeartbeat;
   class WorldServerMachineStateDead;
-  typedef std::list<Client *> ClientList;
-  typedef std::list<UDPSocket *> UDPSocketList;
-  typedef std::list<WorldServerMachine *> WorldServerMachineList;
+  class RoomServerMachine;
+  class RoomServerMachineState;
   typedef int PositionType;
   typedef std::list<CentralDispatchMachine *> CentralDispatchMachineList;
+  typedef std::list<Client *> ClientList;
+  typedef std::list<RoomServerMachine *> RoomServerMachineList;
+  typedef std::list<UDPSocket *> UDPSocketList;
+  typedef std::list<WorldServerMachine *> WorldServerMachineList;
   typedef struct { PositionType x; PositionType y; } Position;
 }
 

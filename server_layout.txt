@@ -7,7 +7,8 @@ CentralDispatch should clean up child processes when it is killed
 
 genclassfile machine central_dispatch connected dead -e heartbeat -e server_ready -e server_quit -e parse_packet
 genclassfile machine world_server login welcome room_join recall -e heartbeat -e room_join -e login -e parse_packet
-genclassfile machine room_server start client_ready client_join -e heartbeat -e parse_packet -e recall
+genclassfile machine room_server start client_ready client_join mob_fight -e heartbeat -e parse_packet -e recall
+genclassfile machine room 
 
 CentralDispatch - start all processes, keep track of which ports are active
 ---------------

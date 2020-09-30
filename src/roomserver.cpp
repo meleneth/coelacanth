@@ -19,12 +19,24 @@
 #include "coelacanth_types.hpp"
 #include "engine/udp_socket.hpp"
 #include "machine/game/game_machine.hpp"
-#include "machine/ticker/ticker_machine.hpp"
+#include "machine/room_server/room_server_machine.hpp"
 
 using namespace Coelacanth;
 
 INITIALIZE_EASYLOGGINGPP
 
+RoomServerMachineList clients;
+
+RoomServerMachine* client_for_listener(UDPSocket &listener) {
+  for (auto client : clients) {
+    if ( client->socket.remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
+      return client;
+    }
+  }
+  auto client = new RoomServerMachine(&listener);
+  clients.push_back(client);
+  return client;
+}
 
 void entry_roomserver(std::string name, int listen_port, int report_port) {
   UDPSocket sender;
