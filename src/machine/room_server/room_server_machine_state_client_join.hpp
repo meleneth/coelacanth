@@ -16,6 +16,7 @@ class RoomServerMachineStateClientJoin : public RoomServerMachineState {
     virtual void onExit(RoomServerMachine& machine);
 
     virtual RoomServerMachineState* recall(RoomServerMachine& machine) override;
+    virtual RoomServerMachineState* parse_packet(RoomServerMachine& machine, DataBuffer& buffer, RoomServerMachineList& clients) override;
 
     virtual void heartbeat(RoomServerMachine& machine, RoomServerMachineList& clients) override;
 };

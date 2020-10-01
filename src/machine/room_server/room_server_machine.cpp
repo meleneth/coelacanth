@@ -41,5 +41,6 @@ void RoomServerMachine::heartbeat(RoomServerMachineList& clients)
 
 void RoomServerMachine::parse_packet(DataBuffer& buffer, RoomServerMachineList& clients)
 {
+  LOG(INFO) << "[RSM] got " << buffer.storage;
   possible_transition(state_->parse_packet(*this, buffer, clients));
 }

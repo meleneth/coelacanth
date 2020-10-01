@@ -27,6 +27,7 @@ CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDi
     return new CentralDispatchMachineStateHeartbeat();
   }
   if (machine.listener->buffer.starts_with("SERVREADY ")) {
+    LOG(INFO) << " Hello server!  I'll call you " << machine.listener->remoteaddr.sin_port;
     return new CentralDispatchMachineStateConnected();
   } else {
     LOG(INFO) << "[cD:Ms] watch out it's the cops says: get out of here with your " << machine.listener->buffer.storage;
@@ -36,4 +37,6 @@ CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDi
 
 void CentralDispatchMachineState::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
 {
+  LOG(INFO) << "[cDp] <Connected> Passing along HEARTBEAT to " << machine.socket.remoteaddr.sin_port;
+  machine.socket.send("HEARTBEAT");
 }

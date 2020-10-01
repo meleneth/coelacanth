@@ -11,8 +11,10 @@ class WorldServerMachineStateLogin : public WorldServerMachineState {
   public:
     WorldServerMachineStateLogin();
     virtual ~WorldServerMachineStateLogin();
+
     virtual void onEnter(WorldServerMachine& machine);
     virtual void onExit(WorldServerMachine& machine);
+
     virtual WorldServerMachineState* parse_packet(WorldServerMachine& machine, DataBuffer& buffer);
 };
 

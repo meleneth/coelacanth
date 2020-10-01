@@ -11,8 +11,11 @@ class RoomServerMachineStateHeartbeat : public RoomServerMachineState {
   public:
     RoomServerMachineStateHeartbeat();
     virtual ~RoomServerMachineStateHeartbeat();
+
     virtual void onEnter(RoomServerMachine& machine);
     virtual void onExit(RoomServerMachine& machine);
+
+    virtual RoomServerMachineState* parse_packet(RoomServerMachine& machine, DataBuffer& buffer, RoomServerMachineList& clients) override;
     virtual RoomServerMachineState* recall(RoomServerMachine& machine);
 };
 

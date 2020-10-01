@@ -47,9 +47,10 @@ RoomServerMachineState* RoomServerMachineState::parse_packet(RoomServerMachine& 
       //for (auto client : game_machine.clients) {
       //  client->socket.send(reply.str());
       //}
-    } else if (buffer.starts_with("HEARTBEAT")) {
-      return new RoomServerMachineStateHeartbeat();
+    }
+    if (buffer.starts_with("HEARTBEAT")) {
       LOG(INFO) << "[roomserver] HEARTBEAT";
+      return new RoomServerMachineStateHeartbeat();
       //ticker.tick();
       //game_machine.tick();
       //for (auto client : game_machine.clients) {

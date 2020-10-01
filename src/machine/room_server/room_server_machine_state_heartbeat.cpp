@@ -19,6 +19,11 @@ void RoomServerMachineStateHeartbeat::onExit(RoomServerMachine& machine)
 {
 }
 
+RoomServerMachineState* RoomServerMachineStateHeartbeat::parse_packet(RoomServerMachine& machine, DataBuffer& buffer, RoomServerMachineList& clients)
+{
+  LOG(INFO) << "[RS:SM] got HeartBEAT";
+}
+
 RoomServerMachineState* RoomServerMachineStateHeartbeat::recall(RoomServerMachine& machine)
 {
   return nullptr;

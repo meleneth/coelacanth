@@ -18,7 +18,6 @@ class RoomServerMachineState {
 
     virtual void heartbeat(RoomServerMachine& machine, RoomServerMachineList& clients);
 
-
     Player *player;
     GameMachine *game;
 };
