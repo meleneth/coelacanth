@@ -1,6 +1,5 @@
 #include "game_machine.hpp"
 
-#include "client.hpp"
 #include "enemy.hpp"
 #include "game_machine_state_combat.hpp"
 
@@ -37,4 +36,9 @@ void GameMachine::create_enemy()
   enemy->stats.xp = 5;
   enemy->stats.attack = 5;
   enemy->stats.health = 50;
+}
+
+void GameMachine::add_player(Player *player)
+{
+  players.push_back(player);
 }

@@ -8,7 +8,7 @@ namespace Coelacanth {
 
 class Player {
   public:
-    Player();
+    Player(std::string player_name);
     ~Player();
     
     Position location;

@@ -16,6 +16,8 @@ class GameMachine {
 
     void create_enemy();
 
+    void add_player(Player *player);
+
     GameMachineState* state_;
     Enemy *enemy;
 

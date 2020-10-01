@@ -21,6 +21,7 @@ class RoomServerMachine {
     RoomServerMachineState * state_;
     
     GameMachine *game;
+    Player *player;
 
     UDPSocket socket;
     UDPSocket *listener;

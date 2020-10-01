@@ -5,9 +5,9 @@
 
 using namespace Coelacanth;
 
-Player::Player()
+Player::Player(std::string player_name)
 {
-  this->name = "NotSetPlayerName";
+  this->name = player_name;
 }
 
 Player::~Player()

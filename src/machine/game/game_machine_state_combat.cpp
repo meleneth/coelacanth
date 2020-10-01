@@ -2,8 +2,8 @@
 
 #include <random_selector.hpp>
 
-#include <client.hpp>
 #include <enemy.hpp>
+#include<player.hpp>
 
 #include "game_machine_state_combat.hpp"
 #include "game_machine_state_enemy_died.hpp"

@@ -4,8 +4,6 @@ bin_PROGRAMS = bin/coelacanth bin/central_dispatch bin/heartbeat bin/worldserver
 ACLOCAL_AMFLAGS = -I m4
 
 src_libcoelacanth_a_SOURCES = \
-  src/client.cpp \
-  src/client.hpp \
   src/random_selector.hpp \
   src/machine/room_server/room_server_machine.cpp \
   src/machine/room_server/room_server_machine.hpp \

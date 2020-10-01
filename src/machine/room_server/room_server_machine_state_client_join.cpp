@@ -23,3 +23,7 @@ RoomServerMachineState* RoomServerMachineStateClientJoin::recall(RoomServerMachi
 {
   return nullptr;
 }
+
+void RoomServerMachineStateClientJoin::heartbeat(RoomServerMachine& machine, RoomServerMachineList& clients)
+{
+}

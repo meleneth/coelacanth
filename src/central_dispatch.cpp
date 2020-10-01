@@ -16,7 +16,6 @@
 
 #include<spawn.h>
 
-#include "client.hpp"
 #include "coelacanth_types.hpp"
 #include "engine/udp_socket.hpp"
 #include "machine/game/game_machine.hpp"
