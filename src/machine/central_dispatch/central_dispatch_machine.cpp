@@ -32,7 +32,7 @@ void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* ne
 void CentralDispatchMachine::heartbeat(CentralDispatchMachineList& clients)
 {
   for(auto client : clients) {
-    client->state_->heartbeat(*this, clients);
+    client->state_->heartbeat(*client, clients);
   }
 }
 

@@ -1,3 +1,16 @@
+Things aren't working out.  Why?
+
+heartbeat: SPAM ip cdp_listen_port
+cDp: listen on cdp_listen_port
+cDp: on server register, write down server_send_port (this is the 'reply' setup against cdp_listen_port)
+cDp: on heartbeat on cdp_listen_port, foreach server: send server_send_port heartbeat
+roomserver: listen on room_listen_port
+roomserver: SERVREADY cdp_listen_port
+roomserver: LOGIN username
+roomserver: 
+
+
+===================================================
 1 CentralDispatch -> runs processes and notices when ports come back available because of clean vs not responding shutdown
 1 GameBrowserServer -> Allows client connection to login, can transfer you to a WorldServer
 5 WorldServer -> One Realm (spacestation)

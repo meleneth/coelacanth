@@ -19,6 +19,8 @@ class CentralDispatchMachine {
     
     CentralDispatchMachineState * state_;
     UDPSocket socket;
+    UDPSocket reply_socket;
+
     UDPSocket *listener;
 };
 

@@ -46,7 +46,9 @@ void entry_roomserver(std::string name, int listen_port, int report_port) {
   listener.listen(listen_port);
 
   GameMachine game;
-  sender.send("SERVREADY server_token_id");
+  std::stringstream reply;
+  reply << "SERVREADY " << listen_port;
+  sender.send(reply.str());
   sender.send("ROOMREADY " + name);
 
   while(1) {

@@ -41,6 +41,7 @@ CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
       return client;
     }
   }
+  //LOG(INFO) << "[cDp] adding new client";
   auto client = new CentralDispatchMachine(&listener);
   clients.push_back(client);
   return client;
@@ -70,7 +71,7 @@ int next_port()
 
 void start_world_server(std::string name)
 {
-  LOG(INFO) << "Starting worldserver " << name;
+  LOG(INFO) << "[cDp] Starting worldserver " << name;
 
   std::string world_server_port = std::to_string(next_port());
 
@@ -78,7 +79,7 @@ void start_world_server(std::string name)
   std::string report_port = std::to_string(CENTRAL_DISPATCH_PORT);
 
 	int pid = fork();
-	if (pid == 0)
+/*	if (pid == 0)
 	{
 			execl("./bin/worldserver", "./bin/worldserver", "-l", listen_port.c_str(), "-r", report_port.c_str(), "-t", "some_token", (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
@@ -87,13 +88,14 @@ void start_world_server(std::string name)
 
   listen_port = std::to_string(next_port());
 	pid = fork();
-	if (pid == 0)
+	*/
+  if (pid == 0)
 	{
 			execl("./bin/roomserver", "./bin/roomserver", "-l", listen_port.c_str(), "-r", report_port.c_str(), "-n", "The_Brick_Road", (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}
-
+/*
 	pid = fork();
 	if (pid == 0)
 	{
@@ -117,7 +119,7 @@ void start_world_server(std::string name)
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}
-
+*/
 	pid = fork();
 	if (pid == 0)
 	{

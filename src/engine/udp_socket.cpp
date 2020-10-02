@@ -13,15 +13,16 @@ void *get_in_addr(struct sockaddr *sa) {
   return &(((struct sockaddr_in6 *)sa)->sin6_addr);
 }
 
-UDPSocket::UDPSocket() : buffer(UDPSOCKETMAXBUFLEN) {}
+UDPSocket::UDPSocket() : buffer(UDPSOCKETMAXBUFLEN) 
+{
+}
 
 UDPSocket::~UDPSocket() {}
 
 void UDPSocket::connect_to(std::string hostname, int port) {
   /* create a socket */
 
-  if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
-    LOG(INFO) << "socket created";
+  fd = socket(AF_INET, SOCK_DGRAM, 0);
 
   /* bind it to all local addresses and pick any port number */
 
@@ -82,8 +83,10 @@ void UDPSocket::recv() {
 void UDPSocket::send(std::string message) {
   ssize_t sentlen = sendto(fd, message.c_str(), message.length(), 0,
                         (struct sockaddr *)&remoteaddr, addrlen);
+  //LOG(INFO) << "<socket> " << this << "->send()";
   if (sentlen == -1 ) {
     LOG(ERROR) << "talker: sendto";
+    perror("sendto");
     exit(1);
   }
 }

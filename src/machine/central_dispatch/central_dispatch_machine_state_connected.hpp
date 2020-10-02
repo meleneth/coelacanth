@@ -16,6 +16,7 @@ class CentralDispatchMachineStateConnected : public CentralDispatchMachineState 
     virtual void onExit(CentralDispatchMachine& machine) override;
 
     virtual CentralDispatchMachineState* parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients) override;
+    virtual void heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients) override;
 };
 
 }
