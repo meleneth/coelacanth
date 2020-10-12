@@ -37,6 +37,7 @@ RoomServerMachineState* RoomServerMachineState::parse_packet(RoomServerMachine& 
       std::string name = std::string((char *)buffer.storage + 5);
       player = new Player(name);
       game->add_player(player);
+      LOG(INFO) << "[RSM] " << this << " dealing with HELO";
       return new RoomServerMachineStateClientJoin();
       //auto new_client = game_machine.client_for_listener(listener);
       //new_client->player.name = name;

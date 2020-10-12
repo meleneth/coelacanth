@@ -37,11 +37,12 @@ void entry_central_dispatch();
 
 CentralDispatchMachine* client_for_listener(UDPSocket &listener) {
   for (auto client : clients) {
+    LOG(INFO) << "[cDp] existing client";
     if ( client->socket.remoteaddr.sin_port == listener.remoteaddr.sin_port ) {
       return client;
     }
   }
-  //LOG(INFO) << "[cDp] adding new client";
+  LOG(INFO) << "[cDp] adding new client";
   auto client = new CentralDispatchMachine(&listener);
   clients.push_back(client);
   return client;
@@ -79,8 +80,10 @@ void start_world_server(std::string name)
   std::string report_port = std::to_string(CENTRAL_DISPATCH_PORT);
 
 	int pid = fork();
-/*	if (pid == 0)
+  /*
+	if (pid == 0)
 	{
+      sleep(1);
 			execl("./bin/worldserver", "./bin/worldserver", "-l", listen_port.c_str(), "-r", report_port.c_str(), "-t", "some_token", (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
@@ -88,25 +91,26 @@ void start_world_server(std::string name)
 
   listen_port = std::to_string(next_port());
 	pid = fork();
-	*/
+  */
   if (pid == 0)
 	{
+      sleep(3);
 			execl("./bin/roomserver", "./bin/roomserver", "-l", listen_port.c_str(), "-r", report_port.c_str(), "-n", "The_Brick_Road", (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}
-/*
 	pid = fork();
 	if (pid == 0)
 	{
+      sleep(5);
 			execl("./bin/coelacanth", "./bin/coelacanth", "-u", "MelX", "-p", listen_port.c_str(), (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}
-
 	pid = fork();
 	if (pid == 0)
 	{
+      sleep(6);
 			execl("./bin/coelacanth", "./bin/coelacanth", "-u", "zYz", "-p", listen_port.c_str(), (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
@@ -115,15 +119,15 @@ void start_world_server(std::string name)
 	pid = fork();
 	if (pid == 0)
 	{
+      sleep(7);
 			execl("./bin/coelacanth", "./bin/coelacanth", "-u", "DocVentur", "-p", listen_port.c_str(), (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}
-*/
 	pid = fork();
 	if (pid == 0)
-	{
-			execl("./bin/heartbeat", "./bin/heartbeat", "-d", "2500000", "-p", report_port.c_str(), (const char *) 0);
+	{   sleep(8);
+			execl("./bin/heartbeat", "./bin/heartbeat", "-d", "2500000", "-p", listen_port.c_str(), (const char *) 0);
 			std::cout << "Exec error: " << errno << ", " << strerror(errno) << '\n';
 			exit(1);
 	}

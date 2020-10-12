@@ -25,6 +25,7 @@ void CentralDispatchMachineStateHeartbeat::onExit(CentralDispatchMachine& machin
 CentralDispatchMachineState* CentralDispatchMachineStateHeartbeat::parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
   if(buffer.starts_with("HEARTBEAT")) {
+    LOG(INFO) << "[cDp] HBT got heartbeat, sending to attached servers";
     machine.heartbeat(clients);
   }
   return nullptr;

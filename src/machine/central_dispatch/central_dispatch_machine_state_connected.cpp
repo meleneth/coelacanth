@@ -22,6 +22,7 @@ void CentralDispatchMachineStateConnected::onExit(CentralDispatchMachine& machin
 CentralDispatchMachineState* CentralDispatchMachineStateConnected::parse_packet(CentralDispatchMachine& machine, DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
   if(buffer.starts_with("HEARTBEAT")) {
+    LOG(INFO) << "[cDp] got heartbeat, sending to attached servers";
     machine.heartbeat(clients);
   }
   return nullptr;
@@ -29,7 +30,7 @@ CentralDispatchMachineState* CentralDispatchMachineStateConnected::parse_packet(
 
 void CentralDispatchMachineStateConnected::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
 {
-  LOG(INFO) << "[cDp] <Connected> Passing along HEARTBEAT to " << machine.socket.remoteaddr.sin_port;
+  LOG(INFO) << "[cDp] <Connected> " << &machine << " Passing along HEARTBEAT to " << machine.reply_socket.myaddr.sin_port;
   machine.reply_socket.send("HEARTBEAT");
 }
 

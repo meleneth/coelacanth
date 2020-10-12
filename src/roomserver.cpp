@@ -52,10 +52,13 @@ void entry_roomserver(std::string name, int listen_port, int report_port) {
   sender.send("ROOMREADY " + name);
 
   while(1) {
-    //LOG(INFO) << "[seRve] listener: waiting to recvfrom...";
+    LOG(INFO) << "[roomserver] listener: waiting to recvfrom...";
     listener.recv();
+    LOG(INFO) << "[roomserver] listener: got";
+    /*
     auto client = client_for_listener(listener, &game);
     client->parse_packet(listener.buffer, clients);
+    */
   }
 }
 
