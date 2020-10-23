@@ -55,10 +55,8 @@ void entry_roomserver(std::string name, int listen_port, int report_port) {
     LOG(INFO) << "[roomserver] listener: waiting to recvfrom...";
     listener.recv();
     LOG(INFO) << "[roomserver] listener: got";
-    /*
     auto client = client_for_listener(listener, &game);
     client->parse_packet(listener.buffer, clients);
-    */
   }
 }
 

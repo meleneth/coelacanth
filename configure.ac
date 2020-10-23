@@ -1,4 +1,4 @@
-AC_PREREQ([2.59])
+AC_PREREQ([2.69])
 AC_INIT([coelacanth],[0.1],[meleneth@gmail.com])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror subdir-objects])
 
@@ -59,5 +59,7 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([atexit floor rint sqrt])
+
+PKG_CHECK_MODULES([GTEST], [gtest_main])
 
 AC_OUTPUT

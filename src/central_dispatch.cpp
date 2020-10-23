@@ -80,7 +80,7 @@ void start_world_server(std::string name)
   std::string report_port = std::to_string(CENTRAL_DISPATCH_PORT);
 
 	int pid = fork();
-  /*
+
 	if (pid == 0)
 	{
       sleep(1);
@@ -91,7 +91,7 @@ void start_world_server(std::string name)
 
   listen_port = std::to_string(next_port());
 	pid = fork();
-  */
+
   if (pid == 0)
 	{
       sleep(3);

@@ -27,11 +27,13 @@ CentralDispatchMachineState* CentralDispatchMachineState::parse_packet(CentralDi
     return new CentralDispatchMachineStateHeartbeat();
   }
   if (machine.listener->buffer.starts_with("SERVREADY ")) {
-    std::string listener_port = (char *)machine.listener->buffer.storage + 10;
-    LOG(INFO) << "[cD:Ms] " << &machine << " reply_to set to port " << std::stoi(listener_port);
-    LOG(INFO) << " HEY SPARKY " << htons(11219);
-    machine.reply_socket.connect_to("127.0.0.1", std::stoi(listener_port));
-    LOG(INFO) << "[cD:Ms] " << &machine << " reply_to set to port -- " << machine.reply_socket.remoteaddr.sin_port;
+    //std::string listener_port = (char *)machine.listener->buffer.storage + 10;
+    //LOG(INFO) << "[cD:Ms] About to crash " << machine.listener->buffer.storage;
+    //LOG(INFO) << "[cD:Ms] " << &machine << " reply_to set to port " << std::stoi(listener_port);
+    //LOG(INFO) << " HEY SPARKY " << htons(11219);
+    //machine.reply_socket.connect_to("127.0.0.1", std::stoi(listener_port));
+    //LOG(INFO) << "[cD:Ms] " << &machine << " reply_to set to port -- " << machine.reply_socket.remoteaddr.sin_port;
+    LOG(INFO) << "[cD:Ms] SERVREADY disabled, fix listener_port";
     return new CentralDispatchMachineStateConnected();
   } else {
     LOG(INFO) << "[cD:Ms] watch out it's the cops says: get out of here with your " << machine.listener->buffer.storage;

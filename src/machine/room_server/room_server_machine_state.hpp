@@ -17,9 +17,6 @@ class RoomServerMachineState {
     virtual RoomServerMachineState* parse_packet(RoomServerMachine& machine, DataBuffer& buffer, RoomServerMachineList& clients);
 
     virtual void heartbeat(RoomServerMachine& machine, RoomServerMachineList& clients);
-
-    Player *player;
-    GameMachine *game;
 };
 
 }

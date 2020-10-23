@@ -45,3 +45,4 @@ vs2012/sapien.opensdf
 vs2012/sapien.sdf
 vs2012/sapien.exe.lastcodeanalysissucceeded
 ar-lib
+*.log

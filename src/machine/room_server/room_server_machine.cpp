@@ -8,6 +8,7 @@ RoomServerMachine::RoomServerMachine(UDPSocket *server_socket, GameMachine *runn
 {
   listener = server_socket;
   game = running_game;
+  player = nullptr;
   state_ = new RoomServerMachineState();
   socket.fd = server_socket->fd;
   socket.remoteaddr = server_socket->remoteaddr;
@@ -15,6 +16,11 @@ RoomServerMachine::RoomServerMachine(UDPSocket *server_socket, GameMachine *runn
 
 RoomServerMachine::~RoomServerMachine()
 {
+}
+
+void RoomServerMachine::send(std::string message)
+{
+  socket.send(message);
 }
 
 void RoomServerMachine::possible_transition(RoomServerMachineState* new_state)

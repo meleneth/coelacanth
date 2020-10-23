@@ -31,6 +31,6 @@ CentralDispatchMachineState* CentralDispatchMachineStateConnected::parse_packet(
 void CentralDispatchMachineStateConnected::heartbeat(CentralDispatchMachine& machine, CentralDispatchMachineList& clients)
 {
   LOG(INFO) << "[cDp] <Connected> " << &machine << " Passing along HEARTBEAT to " << machine.reply_socket.myaddr.sin_port;
-  machine.reply_socket.send("HEARTBEAT");
+  machine.send("HEARTBEAT");
 }
 

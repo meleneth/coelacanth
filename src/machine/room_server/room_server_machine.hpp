@@ -18,6 +18,8 @@ class RoomServerMachine {
 
     virtual void recall();
 
+    void send(std::string message);
+
     RoomServerMachineState * state_;
     
     GameMachine *game;

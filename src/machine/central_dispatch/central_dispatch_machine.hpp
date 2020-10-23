@@ -16,6 +16,8 @@ class CentralDispatchMachine {
     
     virtual void parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients);
     virtual void heartbeat(CentralDispatchMachineList& clients);
+
+    void send(std::string message);
     
     CentralDispatchMachineState * state_;
     UDPSocket socket;

@@ -19,6 +19,11 @@ CentralDispatchMachine::~CentralDispatchMachine()
 {
 }
 
+void CentralDispatchMachine::send(std::string message)
+{
+  reply_socket.send(message);
+}
+
 void CentralDispatchMachine::possible_transition(CentralDispatchMachineState* new_state)
 {
   if(new_state) {

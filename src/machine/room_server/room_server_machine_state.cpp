@@ -1,4 +1,5 @@
 #include "room_server_machine_state.hpp"
+#include "room_server_machine.hpp"
 
 #include "room_server_machine_state_heartbeat.hpp"
 #include "room_server_machine_state_client_join.hpp"
@@ -11,8 +12,6 @@ using namespace Coelacanth;
 
 RoomServerMachineState::RoomServerMachineState()
 {
-  player = nullptr;
-  game = nullptr;
 }
 
 RoomServerMachineState::~RoomServerMachineState()
@@ -35,9 +34,8 @@ RoomServerMachineState* RoomServerMachineState::parse_packet(RoomServerMachine& 
 {
     if (buffer.starts_with("HELO ")) {
       std::string name = std::string((char *)buffer.storage + 5);
-      player = new Player(name);
-      game->add_player(player);
-      LOG(INFO) << "[RSM] " << this << " dealing with HELO";
+      machine.player = new Player(name);
+      machine.game->add_player(machine.player);
       return new RoomServerMachineStateClientJoin();
       //auto new_client = game_machine.client_for_listener(listener);
       //new_client->player.name = name;
@@ -60,6 +58,7 @@ RoomServerMachineState* RoomServerMachineState::parse_packet(RoomServerMachine& 
     } else {
       LOG(INFO) << "server says: get out of here with your " << buffer.storage;
     }
+  LOG(INFO) << "[RSM] NO TRANSITION!";
   return nullptr;
 }
 
