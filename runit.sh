@@ -1,20 +1,9 @@
 #!/bin/bash
 
-killall coelacanth
+set -e
 
-./bin/coelacanth serve &
+cmake --build build
 
-sleep 1
-
-./bin/coelacanth heartbeat &
-./bin/coelacanth client Tom &
-#./bin/coelacanth client Dick &
-#./bin/coelacanth client Harry &
-#./bin/coelacanth client Foo &
-#./bin/coelacanth client Bar &
-#./bin/coelacanth client Baz &
-#./bin/coelacanth client You &
-#./bin/coelacanth client Me &
-#./bin/coelacanth client Belgium &
-#
-#
+./stop_processes.sh || true
+cd build
+./bin/central_dispatch
