@@ -1,7 +1,7 @@
 Archived project note
 =====================
 
-This is an archived demo state-machine project. It is not under active development, but the old generated/ad hoc state machines have been updated to use boost-ext/sml.
+This is an archived demo state-machine project. It is not under active development, but the old generated/ad hoc state machines have been updated to use boost-ext/sml with eventpp-backed variant event dispatch.
 
 Next state will be complete when:
 Players kill Enemies to get XP / Loot
