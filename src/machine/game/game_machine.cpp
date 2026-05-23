@@ -1,7 +1,9 @@
 #include "game_machine.hpp"
 
 #include <boost/sml.hpp>
+#include <eventpp/callbacklist.h>
 #include <sstream>
+#include <variant>
 
 #include "enemy.hpp"
 #include "player.hpp"
@@ -11,7 +13,9 @@ using namespace Coelacanth;
 namespace sml = boost::sml;
 
 namespace {
-struct TickEvent {};
+struct Tick {};
+using GameEvent = std::variant<Tick>;
+
 struct CombatState {};
 struct EnemyDiedState {};
 
@@ -42,16 +46,28 @@ struct GameTransitions {
       machine.create_enemy();
     };
     return make_transition_table(
-      *state<CombatState> + event<TickEvent> [enemy_died_during_combat] = state<EnemyDiedState>,
-       state<EnemyDiedState> + event<TickEvent> / refresh_enemy = state<CombatState>
+      *state<CombatState> + event<Tick> [enemy_died_during_combat] = state<EnemyDiedState>,
+       state<EnemyDiedState> + event<Tick> / refresh_enemy = state<CombatState>
     );
   }
 };
 }
 
 struct GameMachine::Impl {
-  explicit Impl(GameMachine& machine) : sm(machine) {}
+  explicit Impl(GameMachine& machine) : sm(machine) {
+    events.append([this](const GameEvent& event) {
+      std::visit([this](const auto& typed_event) {
+        sm.process_event(typed_event);
+      }, event);
+    });
+  }
+
+  void publish(const GameEvent& event) {
+    events(event);
+  }
+
   sml::sm<GameTransitions> sm;
+  eventpp::CallbackList<void(const GameEvent&)> events;
 };
 
 GameMachine::GameMachine()
@@ -67,7 +83,7 @@ GameMachine::~GameMachine()
 
 void GameMachine::tick()
 {
-  impl_->sm.process_event(TickEvent{});
+  impl_->publish(Tick{});
 }
 
 void GameMachine::create_enemy()

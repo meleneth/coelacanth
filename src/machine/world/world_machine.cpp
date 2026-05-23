@@ -1,12 +1,16 @@
 #include "world_machine.hpp"
 
 #include <boost/sml.hpp>
+#include <eventpp/callbacklist.h>
+#include <variant>
 
 using namespace Coelacanth;
 namespace sml = boost::sml;
 
 namespace {
-struct TickEvent {};
+struct Tick {};
+using WorldEvent = std::variant<Tick>;
+
 struct ConstructState {};
 struct PopulateState {};
 struct SimulateState {};
@@ -16,17 +20,30 @@ struct WorldTransitions {
   auto operator()() const {
     using namespace sml;
     return make_transition_table(
-      *state<ConstructState> + event<TickEvent> = state<PopulateState>,
-       state<PopulateState> + event<TickEvent> = state<SimulateState>,
-       state<SimulateState> + event<TickEvent> = state<EndState>,
-       state<EndState> + event<TickEvent> = state<EndState>
+      *state<ConstructState> + event<Tick> = state<PopulateState>,
+       state<PopulateState> + event<Tick> = state<SimulateState>,
+       state<SimulateState> + event<Tick> = state<EndState>,
+       state<EndState> + event<Tick> = state<EndState>
     );
   }
 };
 }
 
 struct WorldMachine::Impl {
+  Impl() {
+    events.append([this](const WorldEvent& event) {
+      std::visit([this](const auto& typed_event) {
+        sm.process_event(typed_event);
+      }, event);
+    });
+  }
+
+  void publish(const WorldEvent& event) {
+    events(event);
+  }
+
   sml::sm<WorldTransitions> sm;
+  eventpp::CallbackList<void(const WorldEvent&)> events;
 };
 
 WorldMachine::WorldMachine()
@@ -40,7 +57,7 @@ WorldMachine::~WorldMachine()
 
 void WorldMachine::tick()
 {
-  impl_->sm.process_event(TickEvent{});
+  impl_->publish(Tick{});
 }
 
 bool WorldMachine::is_end() const

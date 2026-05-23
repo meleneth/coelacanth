@@ -1,7 +1,9 @@
 #include "room_server_machine.hpp"
 
 #include <boost/sml.hpp>
+#include <eventpp/callbacklist.h>
 #include <sstream>
+#include <variant>
 
 #include "data_buffer.hpp"
 #include "machine/game/game_machine.hpp"
@@ -11,14 +13,15 @@ using namespace Coelacanth;
 namespace sml = boost::sml;
 
 namespace {
-struct ParsePacketEvent {
+struct ParsePacket {
   DataBuffer& buffer;
   RoomServerMachineList& clients;
 };
-struct RecallEvent {};
-struct HeartbeatEvent {
+struct Recall {};
+struct Heartbeat {
   RoomServerMachineList& clients;
 };
+using RoomServerEvent = std::variant<ParsePacket, Recall, Heartbeat>;
 
 struct WaitingState {};
 struct ClientJoinState {};
@@ -30,43 +33,55 @@ struct StartState {};
 struct RoomServerTransitions {
   auto operator()() const {
     using namespace sml;
-    auto helo = [](const ParsePacketEvent& event) {
+    auto helo = [](const ParsePacket& event) {
       return event.buffer.starts_with("HELO ");
     };
-    auto heartbeat_packet = [](const ParsePacketEvent& event) {
+    auto heartbeat_packet = [](const ParsePacket& event) {
       return event.buffer.starts_with("HEARTBEAT");
     };
-    auto join_client = [](RoomServerMachine& machine, const ParsePacketEvent& event) {
+    auto join_client = [](RoomServerMachine& machine, const ParsePacket& event) {
       std::string name = std::string(reinterpret_cast<char *>(event.buffer.storage) + 5);
       machine.player = new Player(name);
       machine.game->add_player(machine.player);
     };
-    auto reject_packet = [](const ParsePacketEvent& event) {
+    auto reject_packet = [](const ParsePacket& event) {
       LOG(INFO) << "server says: get out of here with your " << event.buffer.storage;
     };
-    auto send_ticks = [](const ParsePacketEvent& event) {
+    auto send_ticks = [](const ParsePacket& event) {
       LOG(INFO) << "[RS:SM] got HeartBEAT";
       for(auto client : event.clients) {
         client->send("TICK tick_id");
       }
     };
     return make_transition_table(
-      *state<WaitingState> + event<ParsePacketEvent> [helo] / join_client = state<ClientJoinState>,
-       state<WaitingState> + event<ParsePacketEvent> [heartbeat_packet] = state<HeartbeatState>,
-       state<WaitingState> + event<ParsePacketEvent> / reject_packet,
-       state<HeartbeatState> + event<ParsePacketEvent> / send_ticks,
-       state<ClientJoinState> + event<RecallEvent> = state<ClientJoinState>,
-       state<ClientReadyState> + event<RecallEvent> = state<ClientReadyState>,
-       state<MobFightState> + event<RecallEvent> = state<MobFightState>,
-       state<StartState> + event<RecallEvent> = state<StartState>
+      *state<WaitingState> + event<ParsePacket> [helo] / join_client = state<ClientJoinState>,
+       state<WaitingState> + event<ParsePacket> [heartbeat_packet] = state<HeartbeatState>,
+       state<WaitingState> + event<ParsePacket> / reject_packet,
+       state<HeartbeatState> + event<ParsePacket> / send_ticks,
+       state<ClientJoinState> + event<Recall> = state<ClientJoinState>,
+       state<ClientReadyState> + event<Recall> = state<ClientReadyState>,
+       state<MobFightState> + event<Recall> = state<MobFightState>,
+       state<StartState> + event<Recall> = state<StartState>
     );
   }
 };
 }
 
 struct RoomServerMachine::Impl {
-  explicit Impl(RoomServerMachine& machine) : sm(machine) {}
+  explicit Impl(RoomServerMachine& machine) : sm(machine) {
+    events.append([this](const RoomServerEvent& event) {
+      std::visit([this](const auto& typed_event) {
+        sm.process_event(typed_event);
+      }, event);
+    });
+  }
+
+  void publish(const RoomServerEvent& event) {
+    events(event);
+  }
+
   sml::sm<RoomServerTransitions> sm;
+  eventpp::CallbackList<void(const RoomServerEvent&)> events;
 };
 
 RoomServerMachine::RoomServerMachine(UDPSocket *server_socket, GameMachine *running_game)
@@ -90,20 +105,20 @@ void RoomServerMachine::send(std::string message)
 
 void RoomServerMachine::recall()
 {
-  impl_->sm.process_event(RecallEvent{});
+  impl_->publish(Recall{});
 }
 
 void RoomServerMachine::heartbeat(RoomServerMachineList& clients)
 {
   for(auto client : clients) {
-    client->impl_->sm.process_event(HeartbeatEvent{clients});
+    client->impl_->publish(Heartbeat{clients});
   }
 }
 
 void RoomServerMachine::parse_packet(DataBuffer& buffer, RoomServerMachineList& clients)
 {
   LOG(INFO) << "[RSM] got " << buffer.storage;
-  impl_->sm.process_event(ParsePacketEvent{buffer, clients});
+  impl_->publish(ParsePacket{buffer, clients});
 }
 
 bool RoomServerMachine::is_client_join() const

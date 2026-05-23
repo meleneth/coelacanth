@@ -20,7 +20,13 @@ FetchContent_Declare(
   GIT_TAG v3.8.1
 )
 
-FetchContent_MakeAvailable(sml Catch2)
+FetchContent_Declare(
+  eventpp
+  GIT_REPOSITORY https://github.com/wqking/eventpp.git
+  GIT_TAG v0.1.3
+)
+
+FetchContent_MakeAvailable(sml Catch2 eventpp)
 
 add_library(coelacanth_lib STATIC
   src/engine/data_buffer.cpp
@@ -44,6 +50,7 @@ target_include_directories(coelacanth_lib
     ${CMAKE_CURRENT_SOURCE_DIR}/src/engine
     ${CMAKE_CURRENT_SOURCE_DIR}/src/game
     ${CMAKE_CURRENT_SOURCE_DIR}/src/external
+    ${eventpp_SOURCE_DIR}/include
 )
 
 target_compile_options(coelacanth_lib PRIVATE -Wall -Wextra)

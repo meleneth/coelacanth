@@ -1,3 +1,8 @@
+Archived project note
+=====================
+
+This is an archived demo state-machine project. It is not under active development, but the old generated/ad hoc state machines have been updated to use boost-ext/sml.
+
 Next state will be complete when:
 Players kill Enemies to get XP / Loot
 Players upgrade worn items to better items

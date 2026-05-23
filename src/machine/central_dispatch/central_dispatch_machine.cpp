@@ -1,6 +1,8 @@
 #include "central_dispatch_machine.hpp"
 
 #include <boost/sml.hpp>
+#include <eventpp/callbacklist.h>
+#include <variant>
 
 #include "data_buffer.hpp"
 
@@ -8,13 +10,14 @@ using namespace Coelacanth;
 namespace sml = boost::sml;
 
 namespace {
-struct ParsePacketEvent {
+struct ParsePacket {
   DataBuffer& buffer;
   CentralDispatchMachineList& clients;
 };
-struct HeartbeatEvent {
+struct Heartbeat {
   CentralDispatchMachineList& clients;
 };
+using CentralDispatchEvent = std::variant<ParsePacket, Heartbeat>;
 
 struct WaitingState {};
 struct HeartbeatState {};
@@ -24,7 +27,7 @@ struct DeadState {};
 struct CentralDispatchTransitions {
   auto operator()() const {
     using namespace sml;
-    auto heartbeat_packet = [](const ParsePacketEvent& event) {
+    auto heartbeat_packet = [](const ParsePacket& event) {
       return event.buffer.starts_with("HEARTBEAT");
     };
     auto servready = [](CentralDispatchMachine& machine) {
@@ -37,7 +40,7 @@ struct CentralDispatchTransitions {
       LOG(INFO) << "[cD:Ms] watch out it's the cops says: get out of here with your "
                 << machine.listener->buffer.storage;
     };
-    auto pass_heartbeat = [](CentralDispatchMachine& machine, const ParsePacketEvent& event) {
+    auto pass_heartbeat = [](CentralDispatchMachine& machine, const ParsePacket& event) {
       LOG(INFO) << "[cDp] got heartbeat, sending to attached servers";
       machine.heartbeat(event.clients);
     };
@@ -47,20 +50,32 @@ struct CentralDispatchTransitions {
       machine.send("HEARTBEAT");
     };
     return make_transition_table(
-      *state<WaitingState> + event<ParsePacketEvent> [heartbeat_packet] = state<HeartbeatState>,
-       state<WaitingState> + event<ParsePacketEvent> [servready] / connect_server = state<ConnectedState>,
-       state<WaitingState> + event<ParsePacketEvent> / reject_packet,
-       state<ConnectedState> + event<ParsePacketEvent> [heartbeat_packet] / pass_heartbeat,
-       state<HeartbeatState> + event<ParsePacketEvent> [heartbeat_packet] / pass_heartbeat,
-       state<ConnectedState> + event<HeartbeatEvent> / send_heartbeat
+      *state<WaitingState> + event<ParsePacket> [heartbeat_packet] = state<HeartbeatState>,
+       state<WaitingState> + event<ParsePacket> [servready] / connect_server = state<ConnectedState>,
+       state<WaitingState> + event<ParsePacket> / reject_packet,
+       state<ConnectedState> + event<ParsePacket> [heartbeat_packet] / pass_heartbeat,
+       state<HeartbeatState> + event<ParsePacket> [heartbeat_packet] / pass_heartbeat,
+       state<ConnectedState> + event<Heartbeat> / send_heartbeat
     );
   }
 };
 }
 
 struct CentralDispatchMachine::Impl {
-  explicit Impl(CentralDispatchMachine& machine) : sm(machine) {}
+  explicit Impl(CentralDispatchMachine& machine) : sm(machine) {
+    events.append([this](const CentralDispatchEvent& event) {
+      std::visit([this](const auto& typed_event) {
+        sm.process_event(typed_event);
+      }, event);
+    });
+  }
+
+  void publish(const CentralDispatchEvent& event) {
+    events(event);
+  }
+
   sml::sm<CentralDispatchTransitions> sm;
+  eventpp::CallbackList<void(const CentralDispatchEvent&)> events;
 };
 
 CentralDispatchMachine::CentralDispatchMachine(UDPSocket* server_socket)
@@ -83,13 +98,13 @@ void CentralDispatchMachine::send(std::string message)
 void CentralDispatchMachine::heartbeat(CentralDispatchMachineList& clients)
 {
   for(auto client : clients) {
-    client->impl_->sm.process_event(HeartbeatEvent{clients});
+    client->impl_->publish(Heartbeat{clients});
   }
 }
 
 void CentralDispatchMachine::parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients)
 {
-  impl_->sm.process_event(ParsePacketEvent{buffer, clients});
+  impl_->publish(ParsePacket{buffer, clients});
 }
 
 bool CentralDispatchMachine::is_connected() const
