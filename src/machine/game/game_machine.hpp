@@ -1,6 +1,8 @@
 #ifndef GAME_MACHINE_HPP
 #define GAME_MACHINE_HPP
 
+#include <memory>
+
 #include "coelacanth_types.hpp"
 
 namespace Coelacanth {
@@ -10,18 +12,21 @@ class GameMachine {
     GameMachine();
     ~GameMachine();
 
-    void possible_transition(GameMachineState *new_state);
-
     void tick();
 
     void create_enemy();
 
     void add_player(Player *player);
+    bool is_combat() const;
+    bool is_enemy_died() const;
 
-    GameMachineState* state_;
     Enemy *enemy;
 
     PlayerList players;
+
+  private:
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }

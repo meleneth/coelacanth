@@ -1,9 +1,7 @@
 #ifndef TICKER_MACHINE_HPP
 #define TICKER_MACHINE_HPP
 
-#include "coelacanth_types.hpp"
-
-#include"ticker_machine_state.hpp"
+#include <memory>
 
 namespace Coelacanth {
 
@@ -12,8 +10,13 @@ class TickerMachine {
     TickerMachine();
     ~TickerMachine();
 
-    TickerMachineState* state_;
     void tick();
+    bool is_tick() const;
+    bool is_tock() const;
+
+  private:
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }

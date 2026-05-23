@@ -1,24 +1,21 @@
 #ifndef WORLD_MACHINE_HPP
 #define WORLD_MACHINE_HPP
 
-#include "coelacanth_types.hpp"
-
-#include "world_machine_state.hpp"
+#include <memory>
 
 namespace Coelacanth {
-
-class WorldMachineState;
 
 class WorldMachine {
   public:
     WorldMachine();
     ~WorldMachine();
 
-    void possible_transition(WorldMachineState* state);
-
     void tick();
+    bool is_end() const;
 
-    WorldMachineState * state_;
+  private:
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }

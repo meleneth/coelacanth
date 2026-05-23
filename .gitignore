@@ -1,4 +1,8 @@
 Makefile
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
 Makefile.in
 compile
 aclocal.m4

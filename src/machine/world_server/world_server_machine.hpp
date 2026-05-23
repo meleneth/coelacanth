@@ -1,7 +1,10 @@
 #ifndef WORLD_SERVER_MACHINE_HPP
 #define WORLD_SERVER_MACHINE_HPP
 
+#include <memory>
+
 #include "coelacanth_types.hpp"
+#include "udp_socket.hpp"
 
 namespace Coelacanth {
 
@@ -10,13 +13,14 @@ class WorldServerMachine {
     WorldServerMachine(UDPSocket* server_socket);
     ~WorldServerMachine();
 
-    void possible_transition(WorldServerMachineState* new_state);
-
     virtual void parse_packet(DataBuffer& buffer);
+    bool is_waiting() const;
 
-    WorldServerMachineState * state_;
     UDPSocket* socket;
 
+  private:
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }

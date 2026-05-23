@@ -1,6 +1,8 @@
 #ifndef CENTRAL_DISPATCH_MACHINE_HPP
 #define CENTRAL_DISPATCH_MACHINE_HPP
 
+#include <memory>
+
 #include "coelacanth_types.hpp"
 
 #include "udp_socket.hpp"
@@ -12,18 +14,21 @@ class CentralDispatchMachine {
     CentralDispatchMachine(UDPSocket *server_socket);
     ~CentralDispatchMachine();
 
-    void possible_transition(CentralDispatchMachineState* new_state);
-    
     virtual void parse_packet(DataBuffer& buffer, CentralDispatchMachineList& clients);
     virtual void heartbeat(CentralDispatchMachineList& clients);
 
     void send(std::string message);
+    bool is_connected() const;
+    bool is_heartbeat() const;
     
-    CentralDispatchMachineState * state_;
     UDPSocket socket;
     UDPSocket reply_socket;
 
     UDPSocket *listener;
+
+  private:
+    struct Impl;
+    std::unique_ptr<Impl> impl_;
 };
 
 }
